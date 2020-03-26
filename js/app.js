@@ -1,34 +1,7 @@
 let grid = document.querySelector(".human-grid");
 let gridComp = document.querySelector(".computer-grid");
 let gridItem = document.createElement("div");
-gridItem.className = "grid-item popup";
-
-// MODAL
-
-let modal = document.getElementById("myModal");
-let modalText = document.getElementById("modal-text");
-window.addEventListener('click', function (event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-});
-
-function closeModal() {
-    modal.style.display = "none";
-}
-let tutorial = true;
-
-function tutorialOn() {
-    tutorial = true;
-    closeModal();
-}
-
-function tutorialOff() {
-    tutorial = false;
-    closeModal();
-}
-
-// MODAL
+gridItem.className = "grid-item";
 
 let playerGrid = [
     ['', '', '', '', '', '', '', '', '', ''],
@@ -57,6 +30,54 @@ let computerGrid = [
 let randomHitArr = [];
 let computerPlanes = [];
 let playerPlanes = [];
+let availableDirections = [];
+let action = false;
+let planeParts = 0;
+let headPlaced = false;
+let gameOver = false;
+let playerHitCount = 0;
+let computerHitCount = 0;
+let playersTurn = true;
+let computersTurn = false;
+let playerName = "Player 1";
+let waitingForReturn = false;
+let ok = 0;
+let tutorial = true;
+
+createRandomHitArr();
+createComputerBoard();
+createComputerBoard();
+createPlayerBoard();
+showComputerBoard();
+
+// MODAL
+let modal = document.getElementById("myModal");
+let modalText = document.getElementById("modal-text");
+window.addEventListener('click', function (event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+});
+// MODAL
+
+if (tutorial === true) {
+    setTimeout(modalMessage, 100, "DRAW PLANES", "Click or touch an empty area from the first canvas (your canvas). This will be the head of your plane.", "It will show all available directions (green tiles). Continue by clicking in each cell of the chosen plane.");
+}
+
+function closeModal() {
+    modal.style.display = "none";
+}
+
+
+function tutorialOn() {
+    tutorial = true;
+    closeModal();
+}
+
+function tutorialOff() {
+    tutorial = false;
+    closeModal();
+}
 
 function createRandomHitArr() {
     for (let i = 0; i < 10; i++) {
@@ -65,14 +86,6 @@ function createRandomHitArr() {
         }
     }
 }
-createRandomHitArr();
-let availableDirections = [];
-createComputerBoard();
-createComputerBoard();
-let action = false;
-let planeParts = 0;
-let headPlaced = false;
-let gameOver = false;
 
 function checkGameOver(gridT) {
     let counter = 0;
@@ -82,7 +95,6 @@ function checkGameOver(gridT) {
                 counter++;
             }
         }
-
     }
     if (counter === 0) {
         gameOver = true;
@@ -163,7 +175,6 @@ function createComputerBoard() {
             computerGrid[x][y] = "O";
             computerPlanes.push([x, y]);
             for (let j = 0; j < 14; j += 2) {
-                // a bit confused with the below one day later lol
                 // availableDirections is an array with maximum 4 positions which reflect UP DOWN LEFT RIGHT
                 // this will take a random direction availableDirections[RANDOM][ALL COORDS TO FORM AIRPLANE]
                 if (availableDirections[direction][j + 1] != null) {
@@ -176,17 +187,12 @@ function createComputerBoard() {
         availableDirections = [];
     }
 }
-let playerHitCount = 0;
-let computerHitCount = 0;
-let playersTurn = true;
-let computersTurn = false;
-let playerName = "Player 1";
+
 
 function playerHit(coordX, coordY) {
     if (computerGrid[coordX][coordY] === "X") {
-        // document.getElementById('message').innerText = `${playerName}'s missle hit Computer's plane!`;
         document.getElementById(`${coordX}${coordY}`).innerHTML = `<i class="fas fa-plane"></i>`;
-        computerGrid[coordX][coordY] = 2; // 1 means hit
+        computerGrid[coordX][coordY] = 2;
         drawComputerHitMap();
         playersTurn = false;
         computersTurn = true;
@@ -194,25 +200,17 @@ function playerHit(coordX, coordY) {
     } else if (computerGrid[coordX][coordY] === "O") {
         // if head hit :: check which plane and draw the whole plane
         if (computerPlanes[0][0] === coordX && computerPlanes[0][1] === coordY) {
-            // setTimeout(modalMessage, 1000, "PLANE DOWN", "You have destroied a plane!", "One more to go.");
             for (i = 0; i < 8; i++) {
-                document.getElementById(`${computerPlanes[i][0]}${computerPlanes[i][1]}`).innerHTML = `<i class="fas fa-plane"></i>`; //`<span>X</span>`;
-                // document.getElementById('message').innerText = `${playerName}'s missle hit Computer's plane cabin! PLANE DOWN!!! PLANE DOWN!!!`;
+                document.getElementById(`${computerPlanes[i][0]}${computerPlanes[i][1]}`).innerHTML = `<i class="fas fa-plane"></i>`;
                 computerGrid[computerPlanes[i][0]][computerPlanes[i][1]] = 2;
                 drawComputerHitMap();
-
-
             }
         }
         if (computerPlanes[8][0] === coordX && computerPlanes[8][1] === coordY) {
-            // setTimeout(modalMessage, 1000, "PLANE DOWN", "You have destroied a plane!", "One more to go.");
             for (i = 8; i < 16; i++) {
-                document.getElementById(`${computerPlanes[i][0]}${computerPlanes[i][1]}`).innerHTML = `<i class="fas fa-plane"></i>`; //`<span>X</span>`;
-                // document.getElementById('message').innerText = `${playerName}'s missle hit Computer's plane cabin! PLANE DOWN!!! PLANE DOWN!!!`;
+                document.getElementById(`${computerPlanes[i][0]}${computerPlanes[i][1]}`).innerHTML = `<i class="fas fa-plane"></i>`;
                 computerGrid[computerPlanes[i][0]][computerPlanes[i][1]] = 2;
                 drawComputerHitMap();
-
-
             }
         }
         drawComputerHitMap();
@@ -224,8 +222,6 @@ function playerHit(coordX, coordY) {
         }
     } else {
         document.getElementById(`${coordX}${coordY}`).innerHTML = `<span>X</span>`;
-        // document.getElementById('message').innerText = `${playerName}'s missle hit the ground. MISSED!!!`;
-
         if (gameOver === false) {
             computerGrid[coordX][coordY] = 1;
             playersTurn = false;
@@ -237,11 +233,10 @@ function playerHit(coordX, coordY) {
 }
 
 function computerHit() {
-    // optimize random algorithm as if the game progresses to much random will fail
+    // optimize random algorithm as if the game progresses too much random will fail
     let x = Math.floor(Math.random() * randomHitArr.length);
     if (playerGrid[randomHitArr[x][0]][randomHitArr[x][1]] === "X") {
         document.getElementById(`${randomHitArr[x][0]}-${randomHitArr[x][1]}`).innerHTML = `<i class="fas fa-plane"></i>`;
-        // document.getElementById('message').innerText = `Computer's missle hit ${playerName}'s plane!`;
         playersTurn = true;
         computersTurn = false;
         computerHitCount++;
@@ -250,21 +245,16 @@ function computerHit() {
         if (playerPlanes[0][0] === randomHitArr[x][0] && playerPlanes[0][1] === randomHitArr[x][1]) {
             for (i = 0; i < 8; i++) {
                 document.getElementById(`${playerPlanes[i][0]}-${playerPlanes[i][1]}`).innerHTML = `<i class="fas fa-plane"></i>`;
-                // document.getElementById('message').innerText = `Computer's missle hit ${playerName}'s plane cabin! PLANE DOWN!!! PLANE DOWN!!!`;
                 playerGrid[playerPlanes[i][0]][playerPlanes[i][1]] = 1;
-
             }
         }
         if (playerPlanes[8][0] === randomHitArr[x][0] && playerPlanes[8][1] === randomHitArr[x][1]) {
             for (i = 8; i < 16; i++) {
                 document.getElementById(`${playerPlanes[i][0]}-${playerPlanes[i][1]}`).innerHTML = `<i class="fas fa-plane"></i>`;
-                // document.getElementById('message').innerText = `Computer's missle hit ${playerName}'s plane cabin! PLANE DOWN!!! PLANE DOWN!!!`;
                 playerGrid[playerPlanes[i][0]][playerPlanes[i][1]] = 1;
-
             }
         }
         checkGameOver(playerGrid);
-        // document.getElementById(`${randomHitArr[x][0]}-${randomHitArr[x][1]}`).innerHTML = `<span>X</span>`;
         if (gameOver === false) {
             playersTurn = true;
             computersTurn = false;
@@ -273,7 +263,6 @@ function computerHit() {
 
     } else {
         document.getElementById(`${randomHitArr[x][0]}-${randomHitArr[x][1]}`).innerHTML = `<span>X</span>`;
-        // document.getElementById('message').innerText = `Computer's missle hit the ground. MISSED!!!`;
         if (gameOver === false) {
             playersTurn = true;
             computersTurn = false;
@@ -286,33 +275,26 @@ function computerHit() {
     waitingForReturn = false;
 }
 
-let waitingForReturn = false;
+
 
 
 function hit(e) {
-
     coordX = parseInt(e.target.id[0]);
     coordY = parseInt(e.target.id[1]);
     // check if returned from previous hit (was a problem with the setTimeout function)
     if (waitingForReturn === false) {
         if (action === true && playersTurn === true && gameOver === false && computerGrid[coordX][coordY] !== 1 && computerGrid[coordX][coordY] !== 2) {
-
             waitingForReturn = true;
             playerHit(coordX, coordY);
-            // setTimeout(playerHit, 1000, coordX, coordY);
         }
         if (action === true && computersTurn === true && gameOver === false) {
-            // computerHit();
             waitingForReturn = true;
             document.getElementById('loading-sign').innerHTML = `
-            <i class="fas fa-spinner loading-sign"></i>
-            `;
+            <i class="fas fa-spinner loading-sign"></i>`;
             setTimeout(computerHit, 1500);
         }
         drawComputerHitMap();
-    } else {
-
-    }
+    } else {}
 }
 
 function modalMessage(title, messageOne, messageTwo) {
@@ -320,7 +302,7 @@ function modalMessage(title, messageOne, messageTwo) {
     if (tutorial === true) {
         checkTutorial = `<a href="#" onclick="tutorialOff()" class="play-again">TURN OFF</a>`;
     } else {
-        checkTutorial = `<a href="#" onclick="tutorialOn()" class="play-again">TURN ON</a>`
+        checkTutorial = `<a href="#" onclick="tutorialOn()" class="play-again">TURN ON</a>`;
     }
     modalText.innerHTML = `
                 <h1>${title}</h1>
@@ -330,11 +312,6 @@ function modalMessage(title, messageOne, messageTwo) {
                 ${checkTutorial}`;
     modal.style.display = "flex";
 }
-
-if (tutorial === true) {
-    setTimeout(modalMessage, 100, "DRAW PLANES", "Click or touch an empty area from the first canvas (your canvas). This will be the head of your plane.", "It will show all available directions (green tiles). Continue by clicking in each cell of the chosen plane.");
-}
-
 
 function startGame(e) {
     coordX = parseInt(e.target.id[0]);
@@ -375,9 +352,7 @@ function showAvailableDirections(x, y, gridP) {
         gridP[x - 3][y - 1] === "" &&
         gridP[x - 3][y + 1] === "") {
         availableDirections.unshift([x - 1, y, x - 2, y, x - 3, y, x - 1, y + 1, x - 1, y - 1, x - 3, y - 1, x - 3, y + 1]);
-    } else {
-
-    }
+    } else {}
     //check down location
     if (x <= 6 &&
         gridP[x + 1][y] === "" &&
@@ -433,7 +408,7 @@ function drawChosenPlane() {
                 document.getElementById(`${i}-${j}`).style.background = "#00b8b8";
             }
             if (playerGrid[i][j] === "O") {
-                document.getElementById(`${i}-${j}`).style.background = "#00b8b8";
+                document.getElementById(`${i}-${j}`).style.background = "#00d6c4";
             }
 
         }
@@ -450,7 +425,7 @@ function drawRemainingDirections() {
     }
 }
 
-let ok = 0;
+
 // check if coords are allowed
 function placePlane(x, y) {
     let spliceMe = [];
@@ -513,6 +488,3 @@ function placePlane(x, y) {
     }
     ok = 0;
 }
-
-createPlayerBoard();
-showComputerBoard();
