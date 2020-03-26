@@ -232,6 +232,20 @@ function playerHit(coordX, coordY) {
     waitingForReturn = false;
 }
 
+function removeHitArrLocations() {
+    for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 10; j++) {
+            if (playerGrid[i][j] === 1) {
+                for (let n = 0; n < randomHitArr.length; n++) {
+                    if (randomHitArr[n][0] === i && randomHitArr[n][1] === j) {
+                        randomHitArr.splice(n, 1);
+                    }
+                }
+            }
+        }
+    }
+}
+
 function computerHit() {
     // optimize random algorithm as if the game progresses too much random will fail
     let x = Math.floor(Math.random() * randomHitArr.length);
@@ -243,13 +257,13 @@ function computerHit() {
     } else if (playerGrid[randomHitArr[x][0]][randomHitArr[x][1]] === "O") {
         // if head hit :: check which plane and draw the whole plane
         if (playerPlanes[0][0] === randomHitArr[x][0] && playerPlanes[0][1] === randomHitArr[x][1]) {
-            for (i = 0; i < 8; i++) {
+            for (let i = 0; i < 8; i++) {
                 document.getElementById(`${playerPlanes[i][0]}-${playerPlanes[i][1]}`).innerHTML = `<i class="fas fa-plane"></i>`;
                 playerGrid[playerPlanes[i][0]][playerPlanes[i][1]] = 1;
             }
         }
         if (playerPlanes[8][0] === randomHitArr[x][0] && playerPlanes[8][1] === randomHitArr[x][1]) {
-            for (i = 8; i < 16; i++) {
+            for (let i = 8; i < 16; i++) {
                 document.getElementById(`${playerPlanes[i][0]}-${playerPlanes[i][1]}`).innerHTML = `<i class="fas fa-plane"></i>`;
                 playerGrid[playerPlanes[i][0]][playerPlanes[i][1]] = 1;
             }
@@ -271,8 +285,11 @@ function computerHit() {
     }
     // remove the location from random Array - improves random function and works!!!
     randomHitArr.splice(x, 1);
+    // remove all the locations of the plane if head is hit - somehow missed this!
+    removeHitArrLocations();
     document.getElementById('loading-sign').innerHTML = ``;
     waitingForReturn = false;
+    console.log(randomHitArr);
 }
 
 
