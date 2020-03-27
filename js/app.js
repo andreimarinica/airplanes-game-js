@@ -246,14 +246,155 @@ function removeHitArrLocations() {
     }
 }
 
+let holdHitCoords = [];
+let haveHit = false;
+let up = false;
+let right = false;
+let down = false;
+let left = false;
+let didLastOneHit = false;
+let testUp = false;
+let testRight = false;
+let testDown = false;
+let testLeft = false;
+
 function computerHit() {
     // optimize random algorithm as if the game progresses too much random will fail
     let x = Math.floor(Math.random() * randomHitArr.length);
+
+    // determine the value of x and find the correct coords in randomhitarr...
+    if (haveHit === true) {
+        let xD = holdHitCoords[0][0];
+        let yD = holdHitCoords[0][1];
+        let testUp = false;
+        let testRight = false;
+        let testDown = false;
+        let testLeft = false;
+        for (let i = 0; i < randomHitArr.length; i++) {
+            if (randomHitArr[i][0] === (xD - 1) && randomHitArr[i][1] === yD) {
+                testUp = true;
+            }
+            if (randomHitArr[i][0] === xD && randomHitArr[i][1] === (yD + 1)) {
+                testRight = true;
+            }
+            if (randomHitArr[i][0] === (xD + 1) && randomHitArr[i][1] === yD) {
+                testDown = true;
+            }
+            if (randomHitArr[i][0] === xD && randomHitArr[i][1] === (yD - 1)) {
+                testLeft = true;
+            }
+        }
+
+        if (testUp === false && testRight === false && testDown === false && testLeft === false) {
+            holdHitCoords.splice(0, 1);
+            xD = holdHitCoords[0][0];
+            yD = holdHitCoords[0][1];
+        }
+
+
+        //if (didLastOneHit === true) { // try up, try right, try down, try left :: if hit try again
+        if (up === false && right === false && down === false && left === false) {
+            up = true;
+        }
+
+        if (didLastOneHit === false && up === true) {
+            right = true;
+            up = false;
+        } else if (didLastOneHit === false && right === true) {
+            right = false;
+            down = true;
+        } else if (didLastOneHit === false && down === true) {
+            left = true;
+            down = false;
+        } else if (didLastOneHit === false && left === true) {
+            up = true;
+            left = false;
+        }
+
+
+        if (up === true && testUp === false) {
+            right = true;
+            up = false;
+        }
+        if (right === true && testRight === false) {
+            down = true;
+            right = false;
+        }
+        if (down === true && testDown === false) {
+            left = true;
+            down = false;
+        }
+        if (left === true && testLeft === false) {
+            up = true;
+            left = false;
+        }
+
+        // try up
+        if (up === true) {
+            for (let i = 0; i < randomHitArr.length; i++) {
+                if (randomHitArr[i][0] === (xD - 1) && randomHitArr[i][1] === yD) {
+                    console.log("A INTRAT UPPP");
+                    console.log(xD - 1);
+                    console.log(randomHitArr[i][0]);
+                    console.log(yD);
+                    console.log(randomHitArr[i][1]);
+                    testUp = true;
+                    x = i;
+                }
+            }
+        }
+        if (right === true) {
+            // try right
+            for (let i = 0; i < randomHitArr.length; i++) {
+                if (randomHitArr[i][0] === xD && randomHitArr[i][1] === (yD + 1)) {
+                    console.log("A INTRAT RIGHHT");
+                    console.log(xD);
+                    console.log(randomHitArr[i][0]);
+                    console.log(yD + 1);
+                    console.log(randomHitArr[i][1]);
+                    x = i;
+                }
+            }
+        }
+        if (down === true) {
+            // try down
+            for (let i = 0; i < randomHitArr.length; i++) {
+                if (randomHitArr[i][0] === (xD + 1) && randomHitArr[i][1] === yD) {
+                    console.log("A INTRAT DOWNN");
+                    console.log(xD + 1);
+                    console.log(randomHitArr[i][0]);
+                    console.log(yD);
+                    console.log(randomHitArr[i][1]);
+                    x = i;
+                }
+            }
+        }
+        if (left === true) {
+            // try left
+            for (let i = 0; i < randomHitArr.length; i++) {
+                if (randomHitArr[i][0] === xD && randomHitArr[i][1] === (yD - 1)) {
+                    console.log("A INTRAT LEEFT");
+                    console.log(xD);
+                    console.log(randomHitArr[i][0]);
+                    console.log(yD - 1);
+                    console.log(randomHitArr[i][1]);
+                    x = i;
+                }
+            }
+        }
+        //if()
+
+    }
     if (playerGrid[randomHitArr[x][0]][randomHitArr[x][1]] === "X") {
         document.getElementById(`${randomHitArr[x][0]}-${randomHitArr[x][1]}`).innerHTML = `<i class="fas fa-plane"></i>`;
         playersTurn = true;
         computersTurn = false;
         computerHitCount++;
+        haveHit = true;
+        didLastOneHit = true;
+        holdHitCoords.unshift([randomHitArr[x][0], randomHitArr[x][1]]);
+
+
     } else if (playerGrid[randomHitArr[x][0]][randomHitArr[x][1]] === "O") {
         // if head hit :: check which plane and draw the whole plane
         if (playerPlanes[0][0] === randomHitArr[x][0] && playerPlanes[0][1] === randomHitArr[x][1]) {
@@ -268,6 +409,13 @@ function computerHit() {
                 playerGrid[playerPlanes[i][0]][playerPlanes[i][1]] = 1;
             }
         }
+        haveHit = false;
+        didLastOneHit = false;
+        holdHitCoords = [];
+        up = false;
+        right = false;
+        down = false;
+        left = false;
         checkGameOver(playerGrid);
         if (gameOver === false) {
             playersTurn = true;
@@ -276,7 +424,9 @@ function computerHit() {
         }
 
     } else {
+
         document.getElementById(`${randomHitArr[x][0]}-${randomHitArr[x][1]}`).innerHTML = `<span>X</span>`;
+        didLastOneHit = false;
         if (gameOver === false) {
             playersTurn = true;
             computersTurn = false;
@@ -285,11 +435,12 @@ function computerHit() {
     }
     // remove the location from random Array - improves random function and works!!!
     randomHitArr.splice(x, 1);
+
     // remove all the locations of the plane if head is hit - somehow missed this!
     removeHitArrLocations();
+
     document.getElementById('loading-sign').innerHTML = ``;
     waitingForReturn = false;
-    console.log(randomHitArr);
 }
 
 
@@ -299,6 +450,7 @@ function hit(e) {
     coordX = parseInt(e.target.id[0]);
     coordY = parseInt(e.target.id[1]);
     // check if returned from previous hit (was a problem with the setTimeout function)
+    console.log(holdHitCoords);
     if (waitingForReturn === false) {
         if (action === true && playersTurn === true && gameOver === false && computerGrid[coordX][coordY] !== 1 && computerGrid[coordX][coordY] !== 2) {
             waitingForReturn = true;
