@@ -49,6 +49,11 @@ let missedRand = 0;
 let planeSize = document.querySelector(".human-grid").clientWidth / 10 + "px";
 let smokeSize = document.querySelector(".human-grid").clientWidth / 10 - 5 + "px";
 
+// get a random background 
+
+bgRand = Math.floor(Math.random() * 4 + 1); // 1 - 4
+document.querySelector("body").style.background = `url('../img/bg${bgRand}.jpg') no-repeat center center/cover`;
+
 createRandomHitArr();
 createComputerBoard();
 createComputerBoard();
@@ -196,7 +201,7 @@ function createComputerBoard() {
 
 function playerHit(coordX, coordY) { // 3 head, 2 hit, 1 miss
     if (computerGrid[coordX][coordY] === "X") {
-        document.getElementById(`${coordX}${coordY}`).innerHTML = `<img src="../img/flame.png" alt="" width="${smokeSize}" height="${smokeSize}">`;
+        document.getElementById(`${coordX}${coordY}`).innerHTML = `<img src="../img/flame.png" class="animate" alt="" width="${smokeSize}" height="${smokeSize}">`;
         computerGrid[coordX][coordY] = 2;
         playersTurn = false;
         computersTurn = true;
@@ -205,14 +210,14 @@ function playerHit(coordX, coordY) { // 3 head, 2 hit, 1 miss
         // if head hit :: check which plane and draw the whole plane
         if (computerPlanes[0][0] === coordX && computerPlanes[0][1] === coordY) {
             for (i = 0; i < 8; i++) {
-                document.getElementById(`${computerPlanes[i][0]}${computerPlanes[i][1]}`).innerHTML = `<img src="../img/flame.png" alt="" width="${smokeSize}" height="${smokeSize}">`;
+                document.getElementById(`${computerPlanes[i][0]}${computerPlanes[i][1]}`).innerHTML = `<img src="../img/flame.png" class="animate" alt="" width="${smokeSize}" height="${smokeSize}">`;
                 computerGrid[computerPlanes[i][0]][computerPlanes[i][1]] = 2;
             }
 
         }
         if (computerPlanes[8][0] === coordX && computerPlanes[8][1] === coordY) {
             for (i = 8; i < 16; i++) {
-                document.getElementById(`${computerPlanes[i][0]}${computerPlanes[i][1]}`).innerHTML = `<img src="../img/flame.png" alt="" width="${smokeSize}" height="${smokeSize}">`;
+                document.getElementById(`${computerPlanes[i][0]}${computerPlanes[i][1]}`).innerHTML = `<img src="../img/flame.png" class="animate" alt="" width="${smokeSize}" height="${smokeSize}">`;
                 computerGrid[computerPlanes[i][0]][computerPlanes[i][1]] = 2;
             }
 
@@ -227,7 +232,7 @@ function playerHit(coordX, coordY) { // 3 head, 2 hit, 1 miss
         }
     } else {
         missedRand = Math.floor(Math.random() * 3 + 1);
-        document.getElementById(`${coordX}${coordY}`).innerHTML = `<img src="../img/missed${missedRand}.png" alt="" width="${smokeSize}" height="${smokeSize}">`;
+        document.getElementById(`${coordX}${coordY}`).innerHTML = `<img src="../img/missed${missedRand}.png" class="animate" alt="" width="${smokeSize}" height="${smokeSize}">`;
         if (gameOver === false) {
             computerGrid[coordX][coordY] = 1;
             playersTurn = false;
@@ -391,7 +396,7 @@ function computerHit() {
     }
     if (playerGrid[randomHitArr[x][0]][randomHitArr[x][1]] === "X") {
         // document.getElementById(`${randomHitArr[x][0]}-${randomHitArr[x][1]}`).innerHTML = `<i class="fas fa-plane"></i>`;
-        document.getElementById(`${randomHitArr[x][0]}-${randomHitArr[x][1]}`).innerHTML = `<img src="../img/flame.png" alt="" width="${smokeSize}" height="${smokeSize}">`;
+        document.getElementById(`${randomHitArr[x][0]}-${randomHitArr[x][1]}`).innerHTML = `<img src="../img/flame.png" alt="" class="animate" width="${smokeSize}" height="${smokeSize}">`;
         playersTurn = true;
         computersTurn = false;
         computerHitCount++;
@@ -404,13 +409,13 @@ function computerHit() {
         // if head hit :: check which plane and draw the whole plane
         if (playerPlanes[0][0] === randomHitArr[x][0] && playerPlanes[0][1] === randomHitArr[x][1]) {
             for (let i = 0; i < 8; i++) {
-                document.getElementById(`${playerPlanes[i][0]}-${playerPlanes[i][1]}`).innerHTML = `<img src="../img/flame.png" alt="" width="${smokeSize}" height="${smokeSize}">`;
+                document.getElementById(`${playerPlanes[i][0]}-${playerPlanes[i][1]}`).innerHTML = `<img src="../img/flame.png" alt="" class="animate" width="${smokeSize}" height="${smokeSize}">`;
                 playerGrid[playerPlanes[i][0]][playerPlanes[i][1]] = 1;
             }
         }
         if (playerPlanes[8][0] === randomHitArr[x][0] && playerPlanes[8][1] === randomHitArr[x][1]) {
             for (let i = 8; i < 16; i++) {
-                document.getElementById(`${playerPlanes[i][0]}-${playerPlanes[i][1]}`).innerHTML = `<img src="../img/flame.png" alt="" width="${smokeSize}" height="${smokeSize}">`;
+                document.getElementById(`${playerPlanes[i][0]}-${playerPlanes[i][1]}`).innerHTML = `<img src="../img/flame.png" alt="" class="animate" width="${smokeSize}" height="${smokeSize}">`;
                 playerGrid[playerPlanes[i][0]][playerPlanes[i][1]] = 1;
             }
         }
@@ -430,7 +435,7 @@ function computerHit() {
 
     } else {
         missedRand = Math.floor(Math.random() * 3 + 1);
-        document.getElementById(`${randomHitArr[x][0]}-${randomHitArr[x][1]}`).innerHTML = `<img src="../img/missed${missedRand}.png" alt="" width="${smokeSize}" height="${smokeSize}">`;
+        document.getElementById(`${randomHitArr[x][0]}-${randomHitArr[x][1]}`).innerHTML = `<img src="../img/missed${missedRand}.png" alt="" class="animate" width="${smokeSize}" height="${smokeSize}">`;
         didLastOneHit = false;
         if (gameOver === false) {
             playersTurn = true;
