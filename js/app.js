@@ -2,7 +2,7 @@ let grid = document.querySelector(".human-grid");
 let gridComp = document.querySelector(".computer-grid");
 let gridItem = document.createElement("div");
 gridItem.className = "grid-item";
-
+let onlyOneDirection = [];
 let playerGrid = [
     ['', '', '', '', '', '', '', '', '', ''],
     ['', '', '', '', '', '', '', '', '', ''],
@@ -43,6 +43,7 @@ let playerName = "Player 1";
 let waitingForReturn = false;
 let ok = 0;
 let tutorial = true;
+let missedRand = 0;
 
 createRandomHitArr();
 createComputerBoard();
@@ -221,7 +222,8 @@ function playerHit(coordX, coordY) {
             playerHitCount++;
         }
     } else {
-        document.getElementById(`${coordX}${coordY}`).innerHTML = `<span>X</span>`;
+        missedRand = Math.floor(Math.random() * 3 + 1);
+        document.getElementById(`${coordX}${coordY}`).innerHTML = `<img src="../img/missed${missedRand}.png" alt="" width="25px" height="25px">`;
         if (gameOver === false) {
             computerGrid[coordX][coordY] = 1;
             playersTurn = false;
@@ -386,7 +388,8 @@ function computerHit() {
 
     }
     if (playerGrid[randomHitArr[x][0]][randomHitArr[x][1]] === "X") {
-        document.getElementById(`${randomHitArr[x][0]}-${randomHitArr[x][1]}`).innerHTML = `<i class="fas fa-plane"></i>`;
+        // document.getElementById(`${randomHitArr[x][0]}-${randomHitArr[x][1]}`).innerHTML = `<i class="fas fa-plane"></i>`;
+        document.getElementById(`${randomHitArr[x][0]}-${randomHitArr[x][1]}`).innerHTML = `<img src="../img/flame.png" alt="" width="25px" height="25px">`;
         playersTurn = true;
         computersTurn = false;
         computerHitCount++;
@@ -399,13 +402,13 @@ function computerHit() {
         // if head hit :: check which plane and draw the whole plane
         if (playerPlanes[0][0] === randomHitArr[x][0] && playerPlanes[0][1] === randomHitArr[x][1]) {
             for (let i = 0; i < 8; i++) {
-                document.getElementById(`${playerPlanes[i][0]}-${playerPlanes[i][1]}`).innerHTML = `<i class="fas fa-plane"></i>`;
+                document.getElementById(`${playerPlanes[i][0]}-${playerPlanes[i][1]}`).innerHTML = `<img src="../img/flame.png" alt="" width="25px" height="25px">`;
                 playerGrid[playerPlanes[i][0]][playerPlanes[i][1]] = 1;
             }
         }
         if (playerPlanes[8][0] === randomHitArr[x][0] && playerPlanes[8][1] === randomHitArr[x][1]) {
             for (let i = 8; i < 16; i++) {
-                document.getElementById(`${playerPlanes[i][0]}-${playerPlanes[i][1]}`).innerHTML = `<i class="fas fa-plane"></i>`;
+                document.getElementById(`${playerPlanes[i][0]}-${playerPlanes[i][1]}`).innerHTML = `<img src="../img/flame.png" alt="" width="25px" height="25px">`;
                 playerGrid[playerPlanes[i][0]][playerPlanes[i][1]] = 1;
             }
         }
@@ -424,8 +427,8 @@ function computerHit() {
         }
 
     } else {
-
-        document.getElementById(`${randomHitArr[x][0]}-${randomHitArr[x][1]}`).innerHTML = `<span>X</span>`;
+        missedRand = Math.floor(Math.random() * 3 + 1);
+        document.getElementById(`${randomHitArr[x][0]}-${randomHitArr[x][1]}`).innerHTML = `<img src="../img/missed${missedRand}.png" alt="" width="25px" height="25px">`;
         didLastOneHit = false;
         if (gameOver === false) {
             playersTurn = true;
@@ -449,6 +452,7 @@ function computerHit() {
 function hit(e) {
     coordX = parseInt(e.target.id[0]);
     coordY = parseInt(e.target.id[1]);
+    transfromChosenAirplane();
     // check if returned from previous hit (was a problem with the setTimeout function)
     console.log(holdHitCoords);
     if (waitingForReturn === false) {
@@ -500,7 +504,8 @@ function placeHead(x, y) {
     // Check if location empty, head not placed already and no corners chosen
     if ((playerGrid[x][y] === "") && (headPlaced === false) && availableDirections != "" && (x != 0 || y != 0) && (x != 0 || y != 9) && (x != 9 || y != 0) && (x != 9 || y != 9)) {
         // Place Head
-        document.getElementById(`${x}-${y}`).style.background = '#00b8b8';
+        // document.getElementById(`${x}-${y}`).style.background = '#00b8b8';
+        document.getElementById(`${x}-${y}`).style.background = "url('../img/head.png') no-repeat center center/cover";
         playerGrid[x][y] = "O";
         playerPlanes.push([x, y]);
         headPlaced = true;
@@ -510,7 +515,10 @@ function placeHead(x, y) {
     }
 }
 
+
+
 function showAvailableDirections(x, y, gridP) {
+    onlyOneDirection = [];
     // check up x - 1 goes up
     if (x >= 3 &&
         gridP[x - 1][y] === "" &&
@@ -520,6 +528,7 @@ function showAvailableDirections(x, y, gridP) {
         gridP[x - 1][y - 1] === "" &&
         gridP[x - 3][y - 1] === "" &&
         gridP[x - 3][y + 1] === "") {
+        onlyOneDirection.unshift("up");
         availableDirections.unshift([x - 1, y, x - 2, y, x - 3, y, x - 1, y + 1, x - 1, y - 1, x - 3, y - 1, x - 3, y + 1]);
     } else {}
     //check down location
@@ -531,6 +540,7 @@ function showAvailableDirections(x, y, gridP) {
         gridP[x + 1][y - 1] === "" &&
         gridP[x + 3][y - 1] === "" &&
         gridP[x + 3][y + 1] === "") {
+        onlyOneDirection.unshift("down");
         availableDirections.unshift([x + 1, y, x + 2, y, x + 3, y, x + 1, y + 1, x + 1, y - 1, x + 3, y - 1, x + 3, y + 1]);
 
     } else {}
@@ -545,6 +555,7 @@ function showAvailableDirections(x, y, gridP) {
         gridP[x - 1][y - 1] === "" &&
         gridP[x + 1][y - 3] === "" &&
         gridP[x - 1][y - 3] === "") {
+        onlyOneDirection.unshift("left");
         availableDirections.unshift([x, y - 1, x, y - 2, x, y - 3, x + 1, y - 1, x - 1, y - 1, x - 1, y - 3, x + 1, y - 3]);
     } else {}
     //check right location
@@ -558,6 +569,7 @@ function showAvailableDirections(x, y, gridP) {
         gridP[x - 1][y + 1] === "" &&
         gridP[x + 1][y + 3] === "" &&
         gridP[x - 1][y + 3] === "") {
+        onlyOneDirection.unshift("right");
         availableDirections.unshift([x, y + 1, x, y + 2, x, y + 3, x + 1, y + 1, x - 1, y + 1, x - 1, y + 3, x + 1, y + 3]);
     }
 }
@@ -577,6 +589,7 @@ function drawChosenPlane() {
                 document.getElementById(`${i}-${j}`).style.background = "#00b8b8";
             }
             if (playerGrid[i][j] === "O") {
+                // document.getElementById(`${i}-${j}`).style.background = "url('../img/head.png') no-repeat center center/cover";
                 document.getElementById(`${i}-${j}`).style.background = "#00d6c4";
             }
 
@@ -594,6 +607,126 @@ function drawRemainingDirections() {
     }
 }
 
+function transfromChosenAirplane() {
+    for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 10; j++) {
+            if (playerGrid[i][j] === "O") {
+                let size = document.querySelector(".human-grid").clientWidth / 10 + "px";
+                document.getElementById(`${i}-${j}`).style.background = `url('../img/head.png') no-repeat center/${size} ${size}`;
+
+                //check which direction is the airplane
+                //check up
+                if (i >= 3 &&
+                    playerGrid[i - 1][j] === "X" &&
+                    playerGrid[i - 2][j] === "X" &&
+                    playerGrid[i - 3][j] === "X" &&
+                    playerGrid[i - 1][j + 1] === "X" &&
+                    playerGrid[i - 1][j - 1] === "X" &&
+                    playerGrid[i - 3][j - 1] === "X" &&
+                    playerGrid[i - 3][j + 1] === "X") {
+                    document.getElementById(`${i}-${j}`).style.transform = `rotate(180deg)`;
+                    document.getElementById(`${i - 1}-${j}`).style.background = `url('../img/center.png') no-repeat center/${size} ${size}`;
+                    document.getElementById(`${i - 1}-${j}`).style.transform = `rotate(180deg)`;
+                    document.getElementById(`${i - 2}-${j}`).style.background = `url('../img/back.png') no-repeat center/${size} ${size}`;
+                    document.getElementById(`${i - 2}-${j}`).style.transform = `rotate(180deg)`;
+                    document.getElementById(`${i - 3}-${j}`).style.background = `url('../img/back-back.png') no-repeat center/${size} ${size}`;
+                    document.getElementById(`${i - 3}-${j}`).style.transform = `rotate(180deg)`;
+                    document.getElementById(`${i - 1}-${j +1}`).style.background = `url('../img/left.png') no-repeat center/${size} ${size}`;
+                    document.getElementById(`${i - 1}-${j +1}`).style.transform = `rotate(180deg)`;
+                    document.getElementById(`${i - 1}-${j -1}`).style.background = `url('../img/right.png') no-repeat center/${size} ${size}`;
+                    document.getElementById(`${i - 1}-${j -1}`).style.transform = `rotate(180deg)`;
+                    document.getElementById(`${i - 3}-${j +1}`).style.background = `url('../img/back-left.png') no-repeat center/${size} ${size}`;
+                    document.getElementById(`${i - 3}-${j +1}`).style.transform = `rotate(180deg)`;
+                    document.getElementById(`${i - 3}-${j - 1}`).style.background = `url('../img/back-right.png') no-repeat center/${size} ${size}`;
+                    document.getElementById(`${i - 3}-${j - 1}`).style.transform = `rotate(180deg)`;
+                }
+
+                // check down
+
+                if (i <= 6 &&
+                    playerGrid[i + 1][j] === "X" &&
+                    playerGrid[i + 2][j] === "X" &&
+                    playerGrid[i + 2][j] === "X" &&
+                    playerGrid[i + 1][j + 1] === "X" &&
+                    playerGrid[i + 1][j - 1] === "X" &&
+                    playerGrid[i + 3][j - 1] === "X" &&
+                    playerGrid[i + 3][j + 1] === "X") {
+                    document.getElementById(`${i +1}-${j}`).style.background = `url('../img/center.png') no-repeat center/${size} ${size}`;
+                    document.getElementById(`${i +2}-${j}`).style.background = `url('../img/back.png') no-repeat center/${size} ${size}`;
+                    document.getElementById(`${i +3}-${j}`).style.background = `url('../img/back-back.png') no-repeat center/${size} ${size}`;
+                    document.getElementById(`${i +1}-${j +1}`).style.background = `url('../img/right.png') no-repeat center/${size} ${size}`;
+                    document.getElementById(`${i +1}-${j -1}`).style.background = `url('../img/left.png') no-repeat center/${size} ${size}`;
+                    document.getElementById(`${i +3}-${j +1}`).style.background = `url('../img/back-right.png') no-repeat center/${size} ${size}`;
+                    document.getElementById(`${i +3}-${j - 1}`).style.background = `url('../img/back-left.png') no-repeat center/${size} ${size}`;
+                }
+
+                // check left
+                if (j >= 3 &&
+                    i <= 8 &&
+                    i >= 1 &&
+                    playerGrid[i][j - 1] === "X" &&
+                    playerGrid[i][j - 2] === "X" &&
+                    playerGrid[i][j - 3] === "X" &&
+                    playerGrid[i + 1][j - 1] === "X" &&
+                    playerGrid[i - 1][j - 1] === "X" &&
+                    playerGrid[i + 1][j - 3] === "X" &&
+                    playerGrid[i - 1][j - 3] === "X") {
+                    document.getElementById(`${i}-${j}`).style.transform = `rotate(90deg)`;
+                    document.getElementById(`${i}-${j-1}`).style.background = `url('../img/center.png') no-repeat center/${size} ${size}`;
+                    document.getElementById(`${i}-${j-1}`).style.transform = `rotate(90deg)`;
+                    document.getElementById(`${i}-${j-2}`).style.background = `url('../img/back.png') no-repeat center/${size} ${size}`;
+                    document.getElementById(`${i}-${j-2}`).style.transform = `rotate(90deg)`;
+                    document.getElementById(`${i}-${j-3}`).style.background = `url('../img/back-back.png') no-repeat center/${size} ${size}`;
+                    document.getElementById(`${i}-${j-3}`).style.transform = `rotate(90deg)`;
+                    document.getElementById(`${i + 1}-${j -1}`).style.background = `url('../img/right.png') no-repeat center/${size} ${size}`;
+                    document.getElementById(`${i + 1}-${j -1}`).style.transform = `rotate(90deg)`;
+                    document.getElementById(`${i - 1}-${j -1}`).style.background = `url('../img/left.png') no-repeat center/${size} ${size}`;
+                    document.getElementById(`${i - 1}-${j -1}`).style.transform = `rotate(90deg)`;
+                    document.getElementById(`${i + 1}-${j -3}`).style.background = `url('../img/back-right.png') no-repeat center/${size} ${size}`;
+                    document.getElementById(`${i + 1}-${j -3}`).style.transform = `rotate(90deg)`;
+                    document.getElementById(`${i - 1}-${j - 3}`).style.background = `url('../img/back-left.png') no-repeat center/${size} ${size}`;
+                    document.getElementById(`${i - 1}-${j - 3}`).style.transform = `rotate(90deg)`;
+
+                }
+
+                // check right
+                if (j <= 6 &&
+                    i <= 8 &&
+                    i >= 1 &&
+                    playerGrid[i][j + 1] === "X" &&
+                    playerGrid[i][j + 2] === "X" &&
+                    playerGrid[i][j + 3] === "X" &&
+                    playerGrid[i + 1][j + 1] === "X" &&
+                    playerGrid[i - 1][j + 1] === "X" &&
+                    playerGrid[i + 1][j + 3] === "X" &&
+                    playerGrid[i - 1][j + 3] === "X") {
+                    document.getElementById(`${i}-${j}`).style.transform = `rotate(-90deg)`;
+                    document.getElementById(`${i}-${j+1}`).style.background = `url('../img/center.png') no-repeat center/${size} ${size}`;
+                    document.getElementById(`${i}-${j+1}`).style.transform = `rotate(-90deg)`;
+                    document.getElementById(`${i}-${j+2}`).style.background = `url('../img/back.png') no-repeat center/${size} ${size}`;
+                    document.getElementById(`${i}-${j+2}`).style.transform = `rotate(-90deg)`;
+                    document.getElementById(`${i}-${j+3}`).style.background = `url('../img/back-back.png') no-repeat center/${size} ${size}`;
+                    document.getElementById(`${i}-${j+3}`).style.transform = `rotate(-90deg)`;
+                    document.getElementById(`${i + 1}-${j +1}`).style.background = `url('../img/left.png') no-repeat center/${size} ${size}`;
+                    document.getElementById(`${i + 1}-${j +1}`).style.transform = `rotate(-90deg)`;
+                    document.getElementById(`${i - 1}-${j +1}`).style.background = `url('../img/right.png') no-repeat center/${size} ${size}`;
+                    document.getElementById(`${i - 1}-${j +1}`).style.transform = `rotate(-90deg)`;
+                    document.getElementById(`${i + 1}-${j +3}`).style.background = `url('../img/back-left.png') no-repeat center/${size} ${size}`;
+                    document.getElementById(`${i + 1}-${j +3}`).style.transform = `rotate(-90deg)`;
+                    document.getElementById(`${i - 1}-${j + 3}`).style.background = `url('../img/back-right.png') no-repeat center/${size} ${size}`;
+                    document.getElementById(`${i - 1}-${j + 3}`).style.transform = `rotate(-90deg)`;
+                }
+
+
+
+            }
+            // if (playerGrid[i][j] === "O") {
+            //     document.getElementById(`${i}-${j}`).style.background = "#00d6c4";
+            // }
+
+        }
+    }
+}
 
 // check if coords are allowed
 function placePlane(x, y) {
@@ -630,9 +763,12 @@ function placePlane(x, y) {
         planeParts++;
         // if full plane
         if (planeParts === 7) {
+
             // remove the head check and reset the available locations
             headPlaced = false;
             availableDirections = [];
+            // turn colors into airplane lol
+            //do something here TODO:
             if (tutorial === true) {
                 setTimeout(modalMessage, 100, "DRAW PLANES", "Please choose another location for the second plane.", "Click in the green tiles to form the plane that you want.");
             }

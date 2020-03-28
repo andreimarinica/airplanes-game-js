@@ -281,7 +281,7 @@ body {
 
 .grid-item {
     /* background: #ccc; */
-    border: 1px solid #000;
+    border: 1px solid rgba(0, 0, 0, 0.596);
     display: flex;
     justify-content: center;
     align-items: center;
