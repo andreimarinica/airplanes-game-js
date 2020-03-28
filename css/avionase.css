@@ -6,6 +6,10 @@
     box-sizing: border-box;
 }
 
+#index {
+    background: url('../img/bg1.jpg') no-repeat center center/cover;
+}
+
 body {
     /* background: url('../img/bg.jpg') no-repeat center center/cover; */
     height: 100vh;
