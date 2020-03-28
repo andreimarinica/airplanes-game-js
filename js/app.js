@@ -155,8 +155,8 @@ function showComputerBoard() {
         }
     }
 }
-
-function drawComputerHitMap() {
+//obsolete
+/*function drawComputerHitMap() {
     for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 10; j++) {
             if (computerGrid[i][j] === 3) {
@@ -167,7 +167,7 @@ function drawComputerHitMap() {
             }
         }
     }
-}
+}*/
 
 function createComputerBoard() {
     let checkRandom = false;
@@ -198,7 +198,6 @@ function playerHit(coordX, coordY) { // 3 head, 2 hit, 1 miss
     if (computerGrid[coordX][coordY] === "X") {
         document.getElementById(`${coordX}${coordY}`).innerHTML = `<img src="../img/flame.png" alt="" width="${smokeSize}" height="${smokeSize}">`;
         computerGrid[coordX][coordY] = 2;
-        //drawComputerHitMap();
         playersTurn = false;
         computersTurn = true;
         playerHitCount++;
@@ -208,8 +207,6 @@ function playerHit(coordX, coordY) { // 3 head, 2 hit, 1 miss
             for (i = 0; i < 8; i++) {
                 document.getElementById(`${computerPlanes[i][0]}${computerPlanes[i][1]}`).innerHTML = `<img src="../img/flame.png" alt="" width="${smokeSize}" height="${smokeSize}">`;
                 computerGrid[computerPlanes[i][0]][computerPlanes[i][1]] = 2;
-                //drawComputerHitMap(); TODO:
-
             }
 
         }
@@ -217,14 +214,11 @@ function playerHit(coordX, coordY) { // 3 head, 2 hit, 1 miss
             for (i = 8; i < 16; i++) {
                 document.getElementById(`${computerPlanes[i][0]}${computerPlanes[i][1]}`).innerHTML = `<img src="../img/flame.png" alt="" width="${smokeSize}" height="${smokeSize}">`;
                 computerGrid[computerPlanes[i][0]][computerPlanes[i][1]] = 2;
-                //drawComputerHitMap(); TODO:
-
             }
 
         }
         computerGrid[coordX][coordY] = 3;
         transfromChosenAirplaneComputer();
-        //drawComputerHitMap();
         checkGameOver(computerGrid);
         if (gameOver === false) {
             playersTurn = false;
@@ -394,8 +388,6 @@ function computerHit() {
                 }
             }
         }
-        //if()
-
     }
     if (playerGrid[randomHitArr[x][0]][randomHitArr[x][1]] === "X") {
         // document.getElementById(`${randomHitArr[x][0]}-${randomHitArr[x][1]}`).innerHTML = `<i class="fas fa-plane"></i>`;
@@ -514,8 +506,7 @@ function placeHead(x, y) {
     // Check if location empty, head not placed already and no corners chosen
     if ((playerGrid[x][y] === "") && (headPlaced === false) && availableDirections != "" && (x != 0 || y != 0) && (x != 0 || y != 9) && (x != 9 || y != 0) && (x != 9 || y != 9)) {
         // Place Head
-        // document.getElementById(`${x}-${y}`).style.background = '#00b8b8';
-        document.getElementById(`${x}-${y}`).style.background = "url('../img/head.png') no-repeat center center/cover";
+        document.getElementById(`${x}-${y}`).style.background = "red";
         playerGrid[x][y] = "O";
         playerPlanes.push([x, y]);
         headPlaced = true;
@@ -596,11 +587,10 @@ function drawChosenPlane() {
     for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 10; j++) {
             if (playerGrid[i][j] === "X") {
-                document.getElementById(`${i}-${j}`).style.background = "#00b8b8";
+                document.getElementById(`${i}-${j}`).style.background = "red";
             }
             if (playerGrid[i][j] === "O") {
-                // document.getElementById(`${i}-${j}`).style.background = "url('../img/head.png') no-repeat center center/cover";
-                document.getElementById(`${i}-${j}`).style.background = "#00d6c4";
+                document.getElementById(`${i}-${j}`).style.background = "red";
             }
 
         }
@@ -730,10 +720,6 @@ function transfromChosenAirplaneComputer() {
 
 
             }
-            // if (playerGrid[i][j] === "O") {
-            //     document.getElementById(`${i}-${j}`).style.background = "#00d6c4";
-            // }
-
         }
     }
 }
@@ -743,8 +729,6 @@ function transfromChosenAirplane() {
         for (let j = 0; j < 10; j++) {
             if (playerGrid[i][j] === "O") {
                 planeSize = document.querySelector(".human-grid").clientWidth / 10 + "px";
-                document.getElementById(`${i}-${j}`).style.background = `url('../img/head.png') no-repeat center/${planeSize} ${planeSize}`;
-
                 //check which direction is the airplane
                 //check up
                 if (i >= 3 &&
@@ -755,6 +739,7 @@ function transfromChosenAirplane() {
                     playerGrid[i - 1][j - 1] === "X" &&
                     playerGrid[i - 3][j - 1] === "X" &&
                     playerGrid[i - 3][j + 1] === "X") {
+                    document.getElementById(`${i}-${j}`).style.background = `url('../img/head.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i}-${j}`).style.transform = `rotate(180deg)`;
                     document.getElementById(`${i - 1}-${j}`).style.background = `url('../img/center.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i - 1}-${j}`).style.transform = `rotate(180deg)`;
@@ -782,6 +767,7 @@ function transfromChosenAirplane() {
                     playerGrid[i + 1][j - 1] === "X" &&
                     playerGrid[i + 3][j - 1] === "X" &&
                     playerGrid[i + 3][j + 1] === "X") {
+                    document.getElementById(`${i}-${j}`).style.background = `url('../img/head.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i +1}-${j}`).style.background = `url('../img/center.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i +2}-${j}`).style.background = `url('../img/back.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i +3}-${j}`).style.background = `url('../img/back-back.png') no-repeat center/${planeSize} ${planeSize}`;
@@ -802,6 +788,7 @@ function transfromChosenAirplane() {
                     playerGrid[i - 1][j - 1] === "X" &&
                     playerGrid[i + 1][j - 3] === "X" &&
                     playerGrid[i - 1][j - 3] === "X") {
+                    document.getElementById(`${i}-${j}`).style.background = `url('../img/head.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i}-${j}`).style.transform = `rotate(90deg)`;
                     document.getElementById(`${i}-${j-1}`).style.background = `url('../img/center.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i}-${j-1}`).style.transform = `rotate(90deg)`;
@@ -831,6 +818,7 @@ function transfromChosenAirplane() {
                     playerGrid[i - 1][j + 1] === "X" &&
                     playerGrid[i + 1][j + 3] === "X" &&
                     playerGrid[i - 1][j + 3] === "X") {
+                    document.getElementById(`${i}-${j}`).style.background = `url('../img/head.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i}-${j}`).style.transform = `rotate(-90deg)`;
                     document.getElementById(`${i}-${j+1}`).style.background = `url('../img/center.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i}-${j+1}`).style.transform = `rotate(-90deg)`;
@@ -851,9 +839,6 @@ function transfromChosenAirplane() {
 
 
             }
-            // if (playerGrid[i][j] === "O") {
-            //     document.getElementById(`${i}-${j}`).style.background = "#00d6c4";
-            // }
 
         }
     }
@@ -921,6 +906,7 @@ function placePlane(x, y) {
         drawRemainingDirections();
         // draw the plane from matrix
         drawChosenPlane();
+        // after a complete airplane is down the below function will activate the graphics for it based on it's direction
         transfromChosenAirplane();
     }
     ok = 0;

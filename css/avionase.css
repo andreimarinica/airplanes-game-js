@@ -285,7 +285,14 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    /* animation: animate2 2s infinite linear; */
 }
+
+/* @keyframes animate2 {
+    to {
+        transform: translate(10px);
+    }
+} */
 
 span {
     font-size: 1rem;
