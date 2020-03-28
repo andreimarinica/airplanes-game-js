@@ -469,8 +469,8 @@ function hit(e) {
         }
         if (action === true && computersTurn === true && gameOver === false) {
             waitingForReturn = true;
-            document.getElementById('loading-sign').innerHTML = `
-            <i class="fas fa-spinner loading-sign"></i>`;
+            // document.getElementById('loading-sign').innerHTML = `<i class="fas fa-spinner loading-sign"></i>`;
+            document.getElementById('loading-sign').innerHTML = `<img src="../img/airplane.png" alt="" class="loading-sign" width="${smokeSize}" height="${smokeSize}">`;
             setTimeout(computerHit, 1500);
         }
         //drawComputerHitMap();
@@ -512,7 +512,7 @@ function placeHead(x, y) {
     if ((playerGrid[x][y] === "") && (headPlaced === false) && availableDirections != "" && (x != 0 || y != 0) && (x != 0 || y != 9) && (x != 9 || y != 0) && (x != 9 || y != 9)) {
         // Place Head
         document.getElementById(`${x}-${y}`).style.background = "red";
-        playerGrid[x][y] = "O";
+        playerGrid[x][y] = "O"; // O is head initially
         playerPlanes.push([x, y]);
         headPlaced = true;
     } else {
@@ -618,7 +618,6 @@ function transfromChosenAirplaneComputer() {
             if (computerGrid[i][j] === 3) {
                 planeSize = document.querySelector(".human-grid").clientWidth / 10 + "px";
                 document.getElementById(`${i}${j}`).style.background = `url('../img/head.png') no-repeat center/${planeSize} ${planeSize}`;
-
                 //check which direction is the airplane
                 //check up
                 if (i >= 3 &&
@@ -728,12 +727,18 @@ function transfromChosenAirplaneComputer() {
         }
     }
 }
+// ISSUE: two directions positive if the planes are one after each other 
+// EX: HEAD BODY BODY BODY HEAD BODY BODY BODY
+
 
 function transfromChosenAirplane() {
+    let directions = [];
     for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 10; j++) {
             if (playerGrid[i][j] === "O") {
                 planeSize = document.querySelector(".human-grid").clientWidth / 10 + "px";
+                // use directions.length if 3 splice middle 
+                // get a counter 7 / 14
                 //check which direction is the airplane
                 //check up
                 if (i >= 3 &&
@@ -744,6 +749,7 @@ function transfromChosenAirplane() {
                     playerGrid[i - 1][j - 1] === "X" &&
                     playerGrid[i - 3][j - 1] === "X" &&
                     playerGrid[i - 3][j + 1] === "X") {
+                    directions.unshift("UP");
                     document.getElementById(`${i}-${j}`).style.background = `url('../img/head.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i}-${j}`).style.transform = `rotate(180deg)`;
                     document.getElementById(`${i - 1}-${j}`).style.background = `url('../img/center.png') no-repeat center/${planeSize} ${planeSize}`;
@@ -772,6 +778,8 @@ function transfromChosenAirplane() {
                     playerGrid[i + 1][j - 1] === "X" &&
                     playerGrid[i + 3][j - 1] === "X" &&
                     playerGrid[i + 3][j + 1] === "X") {
+                    directions.unshift("DOWN");
+
                     document.getElementById(`${i}-${j}`).style.background = `url('../img/head.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i +1}-${j}`).style.background = `url('../img/center.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i +2}-${j}`).style.background = `url('../img/back.png') no-repeat center/${planeSize} ${planeSize}`;
@@ -793,6 +801,8 @@ function transfromChosenAirplane() {
                     playerGrid[i - 1][j - 1] === "X" &&
                     playerGrid[i + 1][j - 3] === "X" &&
                     playerGrid[i - 1][j - 3] === "X") {
+                    directions.unshift("LEFT");
+
                     document.getElementById(`${i}-${j}`).style.background = `url('../img/head.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i}-${j}`).style.transform = `rotate(90deg)`;
                     document.getElementById(`${i}-${j-1}`).style.background = `url('../img/center.png') no-repeat center/${planeSize} ${planeSize}`;
@@ -823,6 +833,8 @@ function transfromChosenAirplane() {
                     playerGrid[i - 1][j + 1] === "X" &&
                     playerGrid[i + 1][j + 3] === "X" &&
                     playerGrid[i - 1][j + 3] === "X") {
+                    directions.unshift("RIGHT");
+
                     document.getElementById(`${i}-${j}`).style.background = `url('../img/head.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i}-${j}`).style.transform = `rotate(-90deg)`;
                     document.getElementById(`${i}-${j+1}`).style.background = `url('../img/center.png') no-repeat center/${planeSize} ${planeSize}`;
@@ -847,6 +859,8 @@ function transfromChosenAirplane() {
 
         }
     }
+    console.log(directions);
+    console.log(directions.length);
 }
 
 // check if coords are allowed
@@ -878,7 +892,7 @@ function placePlane(x, y) {
             }
         }
         // add location to matrix
-        playerGrid[x][y] = "X";
+        playerGrid[x][y] = "X"; // plane body is X initially
         playerPlanes.push([x, y]);
         // increment the plane partss used
         planeParts++;
@@ -913,6 +927,8 @@ function placePlane(x, y) {
         drawChosenPlane();
         // after a complete airplane is down the below function will activate the graphics for it based on it's direction
         transfromChosenAirplane();
+
+
     }
     ok = 0;
 }
