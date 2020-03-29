@@ -44,17 +44,19 @@ let waitingForReturn = false;
 let ok = 0;
 let tutorial = true;
 let missedRand = 0;
-//
-
-let movingPlane = 3;
-if (movingPlane % 3 === 0) {
-    document.getElementById('fighter').innerHTML = `<img src="../img/fighter.png" alt="" class="fighter">`;
-}
-
 // size of the images based on the grid size - different for different screen sizes
 let planeSize = document.querySelector(".human-grid").clientWidth / 10 + "px";
 let smokeSize = document.querySelector(".human-grid").clientWidth / 10 - 5 + "px";
 let loadingSize = document.querySelector(".human-grid").clientWidth / 10 + "px";
+// can use a random event below :: for now it will always go
+let fighterHeight = 70;
+let fighterWidth = 60;
+let movingPlane = 3;
+if (movingPlane % 3 === 0) {
+    document.getElementById('fighter').innerHTML = `<img src="../img/fighter.png" alt="" width="${fighterWidth}" height="${fighterHeight}" class="fighter">`;
+}
+
+
 
 // get a random background 
 

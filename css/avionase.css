@@ -90,49 +90,49 @@ body {
 } */
 .fighter {
     position: fixed;
-    width: 120px;
-    height: 140px;
-    top: calc(50vh - 70px);
-    left: calc(50vw - 60px);
+    /* width: 120px;
+    height: 140px; */
+    top: calc(50vh - 45px);
+    left: calc(50vw - 30px);
     animation-name: Fighter;
     animation-duration: 30s;
     animation-iteration-count: infinite;
     animation-direction: forwards;
-    z-index: 1;
+    z-index: -1;
 }
 
 @keyframes Fighter {
     0% {
         opacity: 0;
-        top: calc(50vh - 70px);
-        left: calc(50vw - 60px);
+        top: calc(50vh - 45px);
+        left: calc(50vw - 30px);
     }
 
     5% {
         opacity: 0.2;
         transform: rotate(10deg);
-        top: calc(50vh - 70px);
-        left: calc(50vw - 60px);
+        top: calc(50vh - 45px);
+        left: calc(50vw - 30px);
     }
 
     10% {
         opacity: 0.4;
         transform: rotate(-10deg);
-        top: calc(50vh - 70px);
-        left: calc(50vw - 60px);
+        top: calc(50vh - 45px);
+        left: calc(50vw - 30px);
     }
 
     15% {
         opacity: 0.6;
         transform: rotate(0deg);
-        left: calc(50vw - 60px);
+        left: calc(50vw - 30px);
         top: 100px;
     }
 
     20% {
         opacity: 0.8;
         transform: rotate(-90deg);
-        left: calc(50vw - 60px);
+        left: calc(50vw - 30px);
         top: 100px;
 
     }
@@ -218,35 +218,35 @@ body {
         opacity: 0.4;
         transform: rotate(-90deg);
         top: calc(100vh - 200px);
-        left: calc(50vw - 60px);
+        left: calc(50vw - 30px);
     }
 
     85% {
         opacity: 0.6;
         transform: rotate(0deg);
         top: calc(100vh - 200px);
-        left: calc(50vw - 60px);
+        left: calc(50vw - 30px);
     }
 
     90% {
         opacity: 0.8;
         transform: rotate(0deg);
-        top: calc(50vh - 70px);
-        left: calc(50vw - 60px);
+        top: calc(50vh - 45px);
+        left: calc(50vw - 30px);
     }
 
     95% {
         opacity: 1;
         transform: rotate(0deg);
-        top: calc(50vh - 70px);
-        left: calc(50vw - 60px);
+        top: calc(50vh - 45px);
+        left: calc(50vw - 30px);
     }
 
     100% {
         opacity: 0;
         transform: rotate(0deg);
-        top: calc(50vh - 70px);
-        left: calc(50vw - 60px);
+        top: calc(50vh - 45px);
+        left: calc(50vw - 30px);
     }
 }
 
@@ -558,11 +558,10 @@ span {
         display: grid;
         background: rgba(0, 0, 0, 0.13);
         grid-template-areas:
-            'score-a'
-            'menu'
+
             'human-grid'
-            'computer-grid'
-            'info';
+            'computer-grid';
+
         text-align: center;
         height: 100%;
         width: 100%;
