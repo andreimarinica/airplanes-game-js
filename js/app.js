@@ -48,6 +48,7 @@ let missedRand = 0;
 // size of the images based on the grid size - different for different screen sizes
 let planeSize = document.querySelector(".human-grid").clientWidth / 10 + "px";
 let smokeSize = document.querySelector(".human-grid").clientWidth / 10 - 5 + "px";
+let loadingSize = document.querySelector(".human-grid").clientWidth / 10 + "px";
 
 // get a random background 
 
@@ -467,8 +468,9 @@ function computerHit() {
 
     // remove all the locations of the plane if head is hit - somehow missed this!
     removeHitArrLocations();
-
     document.getElementById('loading-sign').innerHTML = ``;
+    document.getElementById('loading-sign').style.animationPlayState = "initial";
+
     waitingForReturn = false;
 }
 
@@ -489,8 +491,8 @@ function hit(e) {
         if (action === true && computersTurn === true && gameOver === false) {
             waitingForReturn = true;
             // document.getElementById('loading-sign').innerHTML = `<i class="fas fa-spinner loading-sign"></i>`;
-            document.getElementById('loading-sign').innerHTML = `<img src="../img/airplane.png" alt="" class="loading-sign" width="${smokeSize}" height="${smokeSize}">`;
-            setTimeout(computerHit, 1500);
+            document.getElementById('loading-sign').innerHTML = `<img src="../img/airplane.png" alt="" class="loading-sign">`;
+            setTimeout(computerHit, 3000);
         }
         //drawComputerHitMap();
     } else {}
