@@ -732,7 +732,6 @@ function transfromChosenAirplaneComputer() {
 
 
 function transfromChosenAirplane() {
-    let directions = [];
     for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 10; j++) {
             if (playerGrid[i][j] === "O") {
@@ -749,7 +748,6 @@ function transfromChosenAirplane() {
                     playerGrid[i - 1][j - 1] === "X" &&
                     playerGrid[i - 3][j - 1] === "X" &&
                     playerGrid[i - 3][j + 1] === "X") {
-                    directions.unshift("UP");
                     document.getElementById(`${i}-${j}`).style.background = `url('../img/head.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i}-${j}`).style.transform = `rotate(180deg)`;
                     document.getElementById(`${i - 1}-${j}`).style.background = `url('../img/center.png') no-repeat center/${planeSize} ${planeSize}`;
@@ -778,7 +776,6 @@ function transfromChosenAirplane() {
                     playerGrid[i + 1][j - 1] === "X" &&
                     playerGrid[i + 3][j - 1] === "X" &&
                     playerGrid[i + 3][j + 1] === "X") {
-                    directions.unshift("DOWN");
 
                     document.getElementById(`${i}-${j}`).style.background = `url('../img/head.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i +1}-${j}`).style.background = `url('../img/center.png') no-repeat center/${planeSize} ${planeSize}`;
@@ -801,7 +798,6 @@ function transfromChosenAirplane() {
                     playerGrid[i - 1][j - 1] === "X" &&
                     playerGrid[i + 1][j - 3] === "X" &&
                     playerGrid[i - 1][j - 3] === "X") {
-                    directions.unshift("LEFT");
 
                     document.getElementById(`${i}-${j}`).style.background = `url('../img/head.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i}-${j}`).style.transform = `rotate(90deg)`;
@@ -833,7 +829,6 @@ function transfromChosenAirplane() {
                     playerGrid[i - 1][j + 1] === "X" &&
                     playerGrid[i + 1][j + 3] === "X" &&
                     playerGrid[i - 1][j + 3] === "X") {
-                    directions.unshift("RIGHT");
 
                     document.getElementById(`${i}-${j}`).style.background = `url('../img/head.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i}-${j}`).style.transform = `rotate(-90deg)`;
@@ -859,8 +854,6 @@ function transfromChosenAirplane() {
 
         }
     }
-    console.log(directions);
-    console.log(directions.length);
 }
 
 // check if coords are allowed
