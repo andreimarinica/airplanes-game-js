@@ -44,6 +44,12 @@ let waitingForReturn = false;
 let ok = 0;
 let tutorial = true;
 let missedRand = 0;
+//
+
+let movingPlane = 3;
+if (movingPlane % 3 === 0) {
+    document.getElementById('fighter').innerHTML = `<img src="../img/fighter.png" alt="" class="fighter">`;
+}
 
 // size of the images based on the grid size - different for different screen sizes
 let planeSize = document.querySelector(".human-grid").clientWidth / 10 + "px";
@@ -470,7 +476,6 @@ function computerHit() {
     removeHitArrLocations();
     document.getElementById('loading-sign').innerHTML = ``;
     document.getElementById('loading-sign').style.animationPlayState = "initial";
-
     waitingForReturn = false;
 }
 
@@ -490,9 +495,25 @@ function hit(e) {
         }
         if (action === true && computersTurn === true && gameOver === false) {
             waitingForReturn = true;
-            // document.getElementById('loading-sign').innerHTML = `<i class="fas fa-spinner loading-sign"></i>`;
-            document.getElementById('loading-sign').innerHTML = `<img src="../img/airplane.png" alt="" class="loading-sign">`;
-            setTimeout(computerHit, 3000);
+
+            // waiting for computer move :: plane will fly from random direction
+            let randomPlaneAnim;
+            randomPlaneAnim = Math.floor(Math.random() * 4 + 1);
+            document.getElementById('loading-sign').innerHTML = `<img src="../img/airplane${randomPlaneAnim}.png" alt="" class="loading-sign">`;
+
+            randomPlaneAnim = Math.floor(Math.random() * 4 + 1);
+            document.querySelector(".loading-sign").style.animationName = `AirplaneAcrossScreen${randomPlaneAnim}`;
+            if (randomPlaneAnim === 1) {
+                document.querySelector(".loading-sign").style.transform = "rotate(90deg)";
+            } else if (randomPlaneAnim === 2) {
+                document.querySelector(".loading-sign").style.transform = "rotate(-90deg)";
+            } else if (randomPlaneAnim === 3) {
+                document.querySelector(".loading-sign").style.transform = "rotate(180deg)";
+            } else if (randomPlaneAnim === 4) {
+                document.querySelector(".loading-sign").style.transform = "rotate(-360deg)";
+            }
+
+            setTimeout(computerHit, 3500);
         }
         //drawComputerHitMap();
     } else {}

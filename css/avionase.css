@@ -88,6 +88,168 @@ body {
     transform: rotate(360deg);
 
 } */
+.fighter {
+    position: fixed;
+    width: 120px;
+    height: 140px;
+    top: calc(50vh - 70px);
+    left: calc(50vw - 60px);
+    animation-name: Fighter;
+    animation-duration: 30s;
+    animation-iteration-count: infinite;
+    animation-direction: forwards;
+    z-index: 1;
+}
+
+@keyframes Fighter {
+    0% {
+        opacity: 0;
+        top: calc(50vh - 70px);
+        left: calc(50vw - 60px);
+    }
+
+    5% {
+        opacity: 0.2;
+        transform: rotate(10deg);
+        top: calc(50vh - 70px);
+        left: calc(50vw - 60px);
+    }
+
+    10% {
+        opacity: 0.4;
+        transform: rotate(-10deg);
+        top: calc(50vh - 70px);
+        left: calc(50vw - 60px);
+    }
+
+    15% {
+        opacity: 0.6;
+        transform: rotate(0deg);
+        left: calc(50vw - 60px);
+        top: 100px;
+    }
+
+    20% {
+        opacity: 0.8;
+        transform: rotate(-90deg);
+        left: calc(50vw - 60px);
+        top: 100px;
+
+    }
+
+    25% {
+        opacity: 1;
+        transform: rotate(-90deg);
+        left: 20px;
+        top: 100px;
+    }
+
+    30% {
+        opacity: 1;
+        transform: rotate(-180deg);
+        top: 100px;
+        left: 20px;
+    }
+
+    35% {
+        opacity: 1;
+        transform: rotate(-180deg);
+        top: calc(100vh - 200px);
+        left: 20px;
+    }
+
+    40% {
+        opacity: 1;
+        transform: rotate(-270deg);
+        top: calc(100vh - 200px);
+        left: 20px;
+    }
+
+    45% {
+        opacity: 0.8;
+        transform: rotate(-270deg);
+        top: calc(100vh - 200px);
+        left: 20px;
+    }
+
+    50% {
+        opacity: 0.6;
+        transform: rotate(-270deg);
+        top: calc(100vh - 200px);
+        left: 20px;
+    }
+
+    55% {
+        opacity: 0.4;
+        transform: rotate(-270deg);
+        top: calc(100vh - 200px);
+        left: 20px;
+    }
+
+    60% {
+        opacity: 0.2;
+        transform: rotate(-270deg);
+        top: calc(100vh - 200px);
+        left: 20px;
+    }
+
+    65% {
+        opacity: 0;
+        transform: rotate(-270deg);
+        top: calc(100vh - 200px);
+        left: 20px;
+    }
+
+    70% {
+        opacity: 0;
+        transform: rotate(-270deg);
+        top: calc(100vh - 200px);
+        left: calc(100vw - 200px);
+    }
+
+    75% {
+        opacity: 0.2;
+        transform: rotate(-90deg);
+        top: calc(100vh - 200px);
+        left: calc(100vw - 200px);
+    }
+
+    80% {
+        opacity: 0.4;
+        transform: rotate(-90deg);
+        top: calc(100vh - 200px);
+        left: calc(50vw - 60px);
+    }
+
+    85% {
+        opacity: 0.6;
+        transform: rotate(0deg);
+        top: calc(100vh - 200px);
+        left: calc(50vw - 60px);
+    }
+
+    90% {
+        opacity: 0.8;
+        transform: rotate(0deg);
+        top: calc(50vh - 70px);
+        left: calc(50vw - 60px);
+    }
+
+    95% {
+        opacity: 1;
+        transform: rotate(0deg);
+        top: calc(50vh - 70px);
+        left: calc(50vw - 60px);
+    }
+
+    100% {
+        opacity: 0;
+        transform: rotate(0deg);
+        top: calc(50vh - 70px);
+        left: calc(50vw - 60px);
+    }
+}
+
 
 .loading-sign {
     position: fixed;
@@ -116,40 +278,44 @@ body {
     }
 
     100% {
-        left: 1000px;
+        left: calc(100vw + 383px);
 
     }
 }
 
 @keyframes AirplaneAcrossScreen2 {
     0% {
-        left: 800px;
+        left: calc(100vw);
     }
 
     100% {
-        left: -383px;
+        left: -766px;
 
     }
 }
 
 @keyframes AirplaneAcrossScreen3 {
     0% {
-        left: -383px;
+        top: -383px;
+        left: calc(50vw - 191px);
     }
 
     100% {
-        left: 1200px;
+        top: calc(100vh + 383px);
+        left: calc(50vw - 191px);
 
     }
 }
 
 @keyframes AirplaneAcrossScreen4 {
     0% {
-        left: -383px;
+        top: calc(100vh);
+        left: calc(50vw - 191px);
     }
 
     100% {
-        left: 1200px;
+        top: -766px;
+        left: calc(50vw - 191px);
 
     }
 }
