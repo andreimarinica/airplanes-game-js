@@ -101,6 +101,23 @@ function checkGameOver(gridT) {
     let counter = 0;
     for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 10; j++) {
+            if (gridT[i][j] === "X" || gridT[i][j] === "O" || gridT[i][j] === "Y" || gridT[i][j] === "P") {
+                counter++;
+            }
+        }
+    }
+    if (counter === 0) {
+        gameOver = true;
+        checkWinner(playerGrid, computerGrid);
+    } else {
+        gameOver = false;
+    }
+}
+
+function checkGameOverComp(gridT) {
+    let counter = 0;
+    for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 10; j++) {
             if (gridT[i][j] === "X" || gridT[i][j] === "O") {
                 counter++;
             }
@@ -117,7 +134,7 @@ function checkGameOver(gridT) {
 function checkWinner(gridA, gridB) {
     for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 10; j++) {
-            if (gridA[i][j] === "X" || gridA[i][j] === "O") {
+            if (gridA[i][j] === "X" || gridA[i][j] === "O" || gridA[i][j] === "Y" || gridA[i][j] === "P") {
                 modalText.innerHTML = `
                 <h1>GAME OVER</h1>
                 <p>${playerName}'s missles destroyed all the planes!</p>
@@ -200,13 +217,13 @@ function createComputerBoard() {
 
 
 function playerHit(coordX, coordY) { // 3 head, 2 hit, 1 miss
-    if (computerGrid[coordX][coordY] === "X") {
+    if (computerGrid[coordX][coordY] === "X" || computerGrid[coordX][coordY] === "Y") {
         document.getElementById(`${coordX}${coordY}`).innerHTML = `<img src="../img/flame.png" class="animate" alt="" width="${smokeSize}" height="${smokeSize}">`;
         computerGrid[coordX][coordY] = 2;
         playersTurn = false;
         computersTurn = true;
         playerHitCount++;
-    } else if (computerGrid[coordX][coordY] === "O") {
+    } else if (computerGrid[coordX][coordY] === "O" || computerGrid[coordX][coordY] === "P") {
         // if head hit :: check which plane and draw the whole plane
         if (computerPlanes[0][0] === coordX && computerPlanes[0][1] === coordY) {
             for (i = 0; i < 8; i++) {
@@ -224,7 +241,7 @@ function playerHit(coordX, coordY) { // 3 head, 2 hit, 1 miss
         }
         computerGrid[coordX][coordY] = 3;
         transfromChosenAirplaneComputer();
-        checkGameOver(computerGrid);
+        checkGameOverComp(computerGrid);
         if (gameOver === false) {
             playersTurn = false;
             computersTurn = true;
@@ -275,6 +292,7 @@ function computerHit() {
 
     // determine the value of x and find the correct coords in randomhitarr...
     if (haveHit === true) {
+        // A bit of brain for the computer :: still not properly developed
         let xD = holdHitCoords[0][0];
         let yD = holdHitCoords[0][1];
         let testUp = false;
@@ -394,7 +412,8 @@ function computerHit() {
             }
         }
     }
-    if (playerGrid[randomHitArr[x][0]][randomHitArr[x][1]] === "X") {
+    // A bit of brain for the computer :: END
+    if (playerGrid[randomHitArr[x][0]][randomHitArr[x][1]] === "X" || playerGrid[randomHitArr[x][0]][randomHitArr[x][1]] === "Y") {
         // document.getElementById(`${randomHitArr[x][0]}-${randomHitArr[x][1]}`).innerHTML = `<i class="fas fa-plane"></i>`;
         document.getElementById(`${randomHitArr[x][0]}-${randomHitArr[x][1]}`).innerHTML = `<img src="../img/flame.png" alt="" class="animate" width="${smokeSize}" height="${smokeSize}">`;
         playersTurn = true;
@@ -405,7 +424,7 @@ function computerHit() {
         holdHitCoords.unshift([randomHitArr[x][0], randomHitArr[x][1]]);
 
 
-    } else if (playerGrid[randomHitArr[x][0]][randomHitArr[x][1]] === "O") {
+    } else if (playerGrid[randomHitArr[x][0]][randomHitArr[x][1]] === "O" || playerGrid[randomHitArr[x][0]][randomHitArr[x][1]] === "P") {
         // if head hit :: check which plane and draw the whole plane
         if (playerPlanes[0][0] === randomHitArr[x][0] && playerPlanes[0][1] === randomHitArr[x][1]) {
             for (let i = 0; i < 8; i++) {
@@ -583,7 +602,9 @@ function showAvailableDirections(x, y, gridP) {
 function showAvailableDirectionsReset() {
     for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 10; j++) {
-            document.getElementById(`${i}-${j}`).style.background = "";
+            if (playerGrid[i][j] != "Y" && playerGrid[i][j] != "P") {
+                document.getElementById(`${i}-${j}`).style.background = "";
+            }
         }
     }
 }
@@ -628,6 +649,14 @@ function transfromChosenAirplaneComputer() {
                     computerGrid[i - 1][j - 1] === 2 &&
                     computerGrid[i - 3][j - 1] === 2 &&
                     computerGrid[i - 3][j + 1] === 2) {
+                    computerGrid[i][j] = "P";
+                    computerGrid[i - 1][j] = "Y";
+                    computerGrid[i - 2][j] = "Y";
+                    computerGrid[i - 3][j] = "Y";
+                    computerGrid[i - 1][j + 1] = "Y";
+                    computerGrid[i - 1][j - 1] = "Y";
+                    computerGrid[i - 3][j - 1] = "Y";
+                    computerGrid[i - 3][j + 1] = "Y";
                     document.getElementById(`${i}${j}`).style.transform = `rotate(180deg)`;
                     document.getElementById(`${i - 1}${j}`).style.background = `url('../img/center.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i - 1}${j}`).style.transform = `rotate(180deg)`;
@@ -650,11 +679,19 @@ function transfromChosenAirplaneComputer() {
                 if (i <= 6 &&
                     computerGrid[i + 1][j] === 2 &&
                     computerGrid[i + 2][j] === 2 &&
-                    computerGrid[i + 2][j] === 2 &&
+                    computerGrid[i + 3][j] === 2 &&
                     computerGrid[i + 1][j + 1] === 2 &&
                     computerGrid[i + 1][j - 1] === 2 &&
                     computerGrid[i + 3][j - 1] === 2 &&
                     computerGrid[i + 3][j + 1] === 2) {
+                    computerGrid[i][j] = "P";
+                    computerGrid[i + 1][j] = "Y";
+                    computerGrid[i + 2][j] = "Y";
+                    computerGrid[i + 3][j] = "Y";
+                    computerGrid[i + 1][j + 1] = "Y";
+                    computerGrid[i + 1][j - 1] = "Y";
+                    computerGrid[i + 3][j - 1] = "Y";
+                    computerGrid[i + 3][j + 1] = "Y";
                     document.getElementById(`${i +1}${j}`).style.background = `url('../img/center.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i +2}${j}`).style.background = `url('../img/back.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i +3}${j}`).style.background = `url('../img/back-back.png') no-repeat center/${planeSize} ${planeSize}`;
@@ -675,6 +712,14 @@ function transfromChosenAirplaneComputer() {
                     computerGrid[i - 1][j - 1] === 2 &&
                     computerGrid[i + 1][j - 3] === 2 &&
                     computerGrid[i - 1][j - 3] === 2) {
+                    computerGrid[i][j] = "P";
+                    computerGrid[i][j - 1] = "Y";
+                    computerGrid[i][j - 2] = "Y";
+                    computerGrid[i][j - 3] = "Y";
+                    computerGrid[i + 1][j - 1] = "Y";
+                    computerGrid[i - 1][j - 1] = "Y";
+                    computerGrid[i + 1][j - 3] = "Y";
+                    computerGrid[i - 1][j - 3] = "Y";
                     document.getElementById(`${i}${j}`).style.transform = `rotate(90deg)`;
                     document.getElementById(`${i}${j-1}`).style.background = `url('../img/center.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i}${j-1}`).style.transform = `rotate(90deg)`;
@@ -704,6 +749,14 @@ function transfromChosenAirplaneComputer() {
                     computerGrid[i - 1][j + 1] === 2 &&
                     computerGrid[i + 1][j + 3] === 2 &&
                     computerGrid[i - 1][j + 3] === 2) {
+                    computerGrid[i][j] = "P";
+                    computerGrid[i][j + 1] = "Y";
+                    computerGrid[i][j + 2] = "Y";
+                    computerGrid[i][j + 3] = "Y";
+                    computerGrid[i + 1][j + 1] = "Y";
+                    computerGrid[i - 1][j + 1] = "Y";
+                    computerGrid[i + 1][j + 3] = "Y";
+                    computerGrid[i - 1][j + 3] = "Y";
                     document.getElementById(`${i}${j}`).style.transform = `rotate(-90deg)`;
                     document.getElementById(`${i}${j+1}`).style.background = `url('../img/center.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i}${j+1}`).style.transform = `rotate(-90deg)`;
@@ -729,8 +782,6 @@ function transfromChosenAirplaneComputer() {
 }
 // ISSUE: two directions positive if the planes are one after each other 
 // EX: HEAD BODY BODY BODY HEAD BODY BODY BODY
-
-
 function transfromChosenAirplane() {
     for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 10; j++) {
@@ -748,6 +799,14 @@ function transfromChosenAirplane() {
                     playerGrid[i - 1][j - 1] === "X" &&
                     playerGrid[i - 3][j - 1] === "X" &&
                     playerGrid[i - 3][j + 1] === "X") {
+                    playerGrid[i][j] = "P";
+                    playerGrid[i - 1][j] = "Y";
+                    playerGrid[i - 2][j] = "Y";
+                    playerGrid[i - 3][j] = "Y";
+                    playerGrid[i - 1][j + 1] = "Y";
+                    playerGrid[i - 1][j - 1] = "Y";
+                    playerGrid[i - 3][j - 1] = "Y";
+                    playerGrid[i - 3][j + 1] = "Y";
                     document.getElementById(`${i}-${j}`).style.background = `url('../img/head.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i}-${j}`).style.transform = `rotate(180deg)`;
                     document.getElementById(`${i - 1}-${j}`).style.background = `url('../img/center.png') no-repeat center/${planeSize} ${planeSize}`;
@@ -771,12 +830,19 @@ function transfromChosenAirplane() {
                 if (i <= 6 &&
                     playerGrid[i + 1][j] === "X" &&
                     playerGrid[i + 2][j] === "X" &&
-                    playerGrid[i + 2][j] === "X" &&
+                    playerGrid[i + 3][j] === "X" &&
                     playerGrid[i + 1][j + 1] === "X" &&
                     playerGrid[i + 1][j - 1] === "X" &&
                     playerGrid[i + 3][j - 1] === "X" &&
                     playerGrid[i + 3][j + 1] === "X") {
-
+                    playerGrid[i][j] = "P";
+                    playerGrid[i + 1][j] = "Y";
+                    playerGrid[i + 2][j] = "Y";
+                    playerGrid[i + 3][j] = "Y";
+                    playerGrid[i + 1][j + 1] = "Y";
+                    playerGrid[i + 1][j - 1] = "Y";
+                    playerGrid[i + 3][j - 1] = "Y";
+                    playerGrid[i + 3][j + 1] = "Y";
                     document.getElementById(`${i}-${j}`).style.background = `url('../img/head.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i +1}-${j}`).style.background = `url('../img/center.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i +2}-${j}`).style.background = `url('../img/back.png') no-repeat center/${planeSize} ${planeSize}`;
@@ -798,7 +864,14 @@ function transfromChosenAirplane() {
                     playerGrid[i - 1][j - 1] === "X" &&
                     playerGrid[i + 1][j - 3] === "X" &&
                     playerGrid[i - 1][j - 3] === "X") {
-
+                    playerGrid[i][j] = "P";
+                    playerGrid[i][j - 1] = "Y";
+                    playerGrid[i][j - 2] = "Y";
+                    playerGrid[i][j - 3] = "Y";
+                    playerGrid[i + 1][j - 1] = "Y";
+                    playerGrid[i - 1][j - 1] = "Y";
+                    playerGrid[i + 1][j - 3] = "Y";
+                    playerGrid[i - 1][j - 3] = "Y";
                     document.getElementById(`${i}-${j}`).style.background = `url('../img/head.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i}-${j}`).style.transform = `rotate(90deg)`;
                     document.getElementById(`${i}-${j-1}`).style.background = `url('../img/center.png') no-repeat center/${planeSize} ${planeSize}`;
@@ -829,7 +902,14 @@ function transfromChosenAirplane() {
                     playerGrid[i - 1][j + 1] === "X" &&
                     playerGrid[i + 1][j + 3] === "X" &&
                     playerGrid[i - 1][j + 3] === "X") {
-
+                    playerGrid[i][j] = "P";
+                    playerGrid[i][j + 1] = "Y";
+                    playerGrid[i][j + 2] = "Y";
+                    playerGrid[i][j + 3] = "Y";
+                    playerGrid[i + 1][j + 1] = "Y";
+                    playerGrid[i - 1][j + 1] = "Y";
+                    playerGrid[i + 1][j + 3] = "Y";
+                    playerGrid[i - 1][j + 3] = "Y";
                     document.getElementById(`${i}-${j}`).style.background = `url('../img/head.png') no-repeat center/${planeSize} ${planeSize}`;
                     document.getElementById(`${i}-${j}`).style.transform = `rotate(-90deg)`;
                     document.getElementById(`${i}-${j+1}`).style.background = `url('../img/center.png') no-repeat center/${planeSize} ${planeSize}`;
@@ -886,6 +966,7 @@ function placePlane(x, y) {
         }
         // add location to matrix
         playerGrid[x][y] = "X"; // plane body is X initially
+        console.log(playerGrid);
         playerPlanes.push([x, y]);
         // increment the plane partss used
         planeParts++;
