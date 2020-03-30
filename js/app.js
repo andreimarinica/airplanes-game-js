@@ -27,6 +27,7 @@ let computerGrid = [
     ['', '', '', '', '', '', '', '', '', ''],
     ['', '', '', '', '', '', '', '', '', '']
 ];
+let selectedItem;
 let randomHitArr = [];
 let computerPlanes = [];
 let playerPlanes = [];
@@ -66,18 +67,129 @@ if (movingPlane % 3 === 0) {
     document.getElementById('clouds-left-2').innerHTML = `<img src="../img/clouds${cloudRand}.png" alt="" width="${cloudWidth}" height="${cloudsHeight}" class="clouds-left-2">`;
 }
 
+function clearViews() {
+    for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 10; j++) {
+            if (playerGrid[i][j] === "") {
+                // If it's empty (and will be) clear the backgrounds (airplanes) and any hit marks
+                document.getElementById(`${i}-${j}`).style.background = "";
+                document.getElementById(`${i}-${j}`).innerHTML = "";
 
+            }
+            if (computerGrid[i][j] === "") {
+                // If it's empty (and will be) clear the backgrounds (airplanes) and any hit marks
+                document.getElementById(`${i}${j}`).style.background = "";
+                document.getElementById(`${i}${j}`).innerHTML = "";
+
+            }
+
+        }
+    }
+    // Clear all the inserted grid cells 
+    document.getElementById("playerGrid").innerHTML = "";
+    document.getElementById("computerGrid").innerHTML = "";
+}
+
+function clearLevel() {
+    // reset all vars to original state
+    playerGrid = [
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', '']
+    ];
+    computerGrid = [
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', '']
+    ];
+    onlyOneDirection = [];
+    randomHitArr = [];
+    computerPlanes = [];
+    playerPlanes = [];
+    availableDirections = [];
+    action = false;
+    planeParts = 0;
+    headPlaced = false;
+    gameOver = false;
+    playerHitCount = 0;
+    computerHitCount = 0;
+    playersTurn = true;
+    computersTurn = false;
+    waitingForReturn = false;
+    ok = 0;
+    tutorial = true;
+    missedRand = 0;
+    holdHitCoords = [];
+    haveHit = false;
+    up = false;
+    right = false;
+    down = false;
+    left = false;
+    didLastOneHit = false;
+    testUp = false;
+    testRight = false;
+    testDown = false;
+    testLeft = false;
+    // clear the visual design for a fresh game
+    clearViews();
+}
+
+let currentLevel = 1;
+
+function currentLevelStatus() {
+    if (currentLevel === 1) {
+        createRandomHitArr();
+        createComputerBoard();
+        createComputerBoard();
+        createPlayerBoard();
+        showComputerBoard();
+        document.querySelector("body").style.background = `url('../img/bg1.jpg') no-repeat center center/cover`;
+    } else if (currentLevel === 2) {
+        clearLevel();
+        createRandomHitArr();
+        createComputerBoard();
+        createComputerBoard();
+        createComputerBoard();
+        createPlayerBoard();
+        showComputerBoard();
+        document.querySelector("body").style.background = `url('../img/bg2.jpg') no-repeat center center/cover`;
+    } else if (currentLevel === 3) {
+        clearLevel();
+        createRandomHitArr();
+        createComputerBoard();
+        createComputerBoard();
+        createComputerBoard();
+        createComputerBoard();
+        createPlayerBoard();
+        showComputerBoard();
+        document.querySelector("body").style.background = `url('../img/bg3.jpg') no-repeat center center/cover`;
+    }
+}
+
+function nextLevel() {
+    currentLevel++;
+    currentLevelStatus();
+}
+currentLevelStatus();
 
 // get a random background 
 
-bgRand = Math.floor(Math.random() * 4 + 1); // 1 - 4
-document.querySelector("body").style.background = `url('../img/bg${bgRand}.jpg') no-repeat center center/cover`;
-
-createRandomHitArr();
-createComputerBoard();
-createComputerBoard();
-createPlayerBoard();
-showComputerBoard();
+//bgRand = Math.floor(Math.random() * 4 + 1); // 1 - 4
+// document.querySelector("body").style.background = `url('../img/bg${bgRand}.jpg') no-repeat center center/cover`;
 
 // MODAL
 let modal = document.getElementById("myModal");
@@ -93,12 +205,11 @@ window.addEventListener('click', function (event) {
 function gameMenu() {
     modalText.innerHTML = `
                 <h1>GAME MENU</h1>
-                <p></p>
-                <p></p>
+                <a href="#" class="menu-option">CONTINUE</a>
                 <a href="#" class="menu-option"><i class="fas fa-plane-departure menu-icon"></i> NEW GAME</a>
                 <a href="#" class="menu-option"><i class="fas fa-redo-alt menu-icon"></i> RESTART</a>
                 <a href="#" onclick="optionsMenu()" class="menu-option"><i class="fas fa-tools menu-icon"></i> OPTIONS</a>
-                <a href="#" class="menu-option">PLAY AGAIN</a>
+                
                 <a href="#" onclick="exitTrue()" class="menu-option"><i class="fas fa-plane-arrival"></i> EXIT GAME</a>`;
     modal.style.display = "flex";
 }
@@ -111,6 +222,8 @@ function exitTrue() {
                 <a href="#" onclick="window.close()" class="play-again exit-yes">YES</a>`;
     modal.style.display = "flex";
 }
+let animationMode = true;
+let animationStatus;
 
 function optionsMenu() {
     if (tutorial === true) {
@@ -118,13 +231,53 @@ function optionsMenu() {
     } else {
         checkTutorial = `<a href="#" onclick="tutorialOn(); optionsMenu();" class="menu-option"><i class="fas fa-spell-check menu-icon"></i> TUTORIAL OFF</a>`;
     }
+
+    if (animationMode === true) {
+        animationStatus = `<a href="#" onclick="animationOff(); optionsMenu();" class="menu-option"><i class="fas fa-spell-check menu-icon"></i> ANIMATION ON</a>`;
+    } else {
+        animationStatus = `<a href="#" onclick="animationOn(); optionsMenu();" class="menu-option"><i class="fas fa-spell-check menu-icon"></i> ANIMATION OFF</a>`;
+    }
     modalText.innerHTML = `
     <h1>OPTIONS</h1>
     ${checkTutorial}
-    <a href="#" class="menu-option"><i class="fas fa-plane-departure menu-icon"></i> CHANGE NAME</a>
+    ${animationStatus}
     <a href="#" class="menu-option"><i class="fas fa-redo-alt menu-icon"></i> RESET SCORE</a>
+    <a href="#" class="menu-option"><i class="fas fa-redo-alt menu-icon"></i> SOUND OFF</a>
+    <a href="#" class="menu-option"><i class="fas fa-redo-alt menu-icon"></i> GRID LINES OFF</a>
     <a href="#" onclick="gameMenu()" class="menu-option"><i class="fas fa-undo menu-icon"></i> GO BACK</a>`;
     modal.style.display = "flex";
+}
+
+function animationOn() {
+    animationMode = true;
+    document.getElementById("loading-sign").style.display = "inherit";
+    document.getElementById("fighter").style.display = "inherit";
+    document.getElementById("clouds-right").style.display = "inherit";
+    document.getElementById("clouds-right-2").style.display = "inherit";
+    document.getElementById("clouds-left").style.display = "inherit";
+    document.getElementById("clouds-left-2").style.display = "inherit";
+    closeModal();
+}
+
+function animationOff() {
+    animationMode = false;
+    document.getElementById("loading-sign").style.display = "none";
+    document.getElementById("fighter").style.display = "none";
+    document.getElementById("clouds-right").style.display = "none";
+    document.getElementById("clouds-right-2").style.display = "none";
+    document.getElementById("clouds-left").style.display = "none";
+    document.getElementById("clouds-left-2").style.display = "none";
+    closeModal();
+}
+
+function tutorialOn() {
+    tutorial = true;
+    closeModal();
+}
+
+function tutorialOff() {
+    tutorial = false;
+    closeModal();
 }
 // gameMenu
 
@@ -137,15 +290,7 @@ function closeModal() {
 }
 
 
-function tutorialOn() {
-    tutorial = true;
-    closeModal();
-}
 
-function tutorialOff() {
-    tutorial = false;
-    closeModal();
-}
 
 function createRandomHitArr() {
     for (let i = 0; i < 10; i++) {
@@ -194,10 +339,11 @@ function checkWinner(gridA, gridB) {
         for (let j = 0; j < 10; j++) {
             if (gridA[i][j] === "X" || gridA[i][j] === "O" || gridA[i][j] === "Y" || gridA[i][j] === "P") {
                 modalText.innerHTML = `
-                <h1>GAME OVER</h1>
-                <p>${playerName}'s missles destroyed all the planes!</p>
-                <p>${playerName} won.</p>
-                <a href="avionase.html" class="play-again">PLAY AGAIN</a>`;
+                <h1>ENEMY DOWN</h1>
+                <p>${playerName}, you won this battle gaining NO_OF_POINTS</p>
+                <p>Please choose your next move.</p>
+                <a href="#" class="play-again" onclick="currentLevelStatus(); closeModal();">RESTART LEVEL</a>
+                <a href="#" class="play-again" onclick="nextLevel(); closeModal();">NEXT LEVEL</a>`;
                 modal.style.display = "flex";
                 break;
             }
@@ -214,12 +360,13 @@ function checkWinner(gridA, gridB) {
     }
 }
 
+
 function createPlayerBoard() {
     for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 10; j++) {
             gridItem.id = `${i}-${j}`;
             grid.appendChild(gridItem.cloneNode(true));
-            let selectedItem = document.getElementById(`${i}-${j}`);
+            selectedItem = document.getElementById(`${i}-${j}`);
             selectedItem.addEventListener("click", startGame);
         }
     }
@@ -259,6 +406,7 @@ function createComputerBoard() {
         if (availableDirections != "" && computerGrid[x][y] === "") {
             computerGrid[x][y] = "O";
             computerPlanes.push([x, y]);
+            console.log(computerPlanes);
             for (let j = 0; j < 14; j += 2) {
                 // availableDirections is an array with maximum 4 positions which reflect UP DOWN LEFT RIGHT
                 // this will take a random direction availableDirections[RANDOM][ALL COORDS TO FORM AIRPLANE]
@@ -295,7 +443,23 @@ function playerHit(coordX, coordY) { // 3 head, 2 hit, 1 miss
                 document.getElementById(`${computerPlanes[i][0]}${computerPlanes[i][1]}`).innerHTML = `<img src="../img/flame.png" class="animate" alt="" width="${smokeSize}" height="${smokeSize}">`;
                 computerGrid[computerPlanes[i][0]][computerPlanes[i][1]] = 2;
             }
+        }
+        if (currentLevel === 2) {
+            if (computerPlanes[16][0] === coordX && computerPlanes[16][1] === coordY) {
+                for (i = 16; i < 24; i++) {
+                    document.getElementById(`${computerPlanes[i][0]}${computerPlanes[i][1]}`).innerHTML = `<img src="../img/flame.png" class="animate" alt="" width="${smokeSize}" height="${smokeSize}">`;
+                    computerGrid[computerPlanes[i][0]][computerPlanes[i][1]] = 2;
+                }
+            }
+        }
 
+        if (currentLevel === 3) {
+            if (computerPlanes[24][0] === coordX && computerPlanes[24][1] === coordY) {
+                for (i = 24; i < 32; i++) {
+                    document.getElementById(`${computerPlanes[i][0]}${computerPlanes[i][1]}`).innerHTML = `<img src="../img/flame.png" class="animate" alt="" width="${smokeSize}" height="${smokeSize}">`;
+                    computerGrid[computerPlanes[i][0]][computerPlanes[i][1]] = 2;
+                }
+            }
         }
         computerGrid[coordX][coordY] = 3;
         transfromChosenAirplaneComputer();
@@ -539,6 +703,7 @@ function hit(e) {
     transfromChosenAirplane();
     // check if returned from previous hit (was a problem with the setTimeout function)
     console.log(holdHitCoords);
+    console.log(computerGrid);
     if (waitingForReturn === false) {
         if (action === true && playersTurn === true && gameOver === false && computerGrid[coordX][coordY] !== 1 && computerGrid[coordX][coordY] !== 2) {
             waitingForReturn = true;
