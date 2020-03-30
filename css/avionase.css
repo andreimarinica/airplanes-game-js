@@ -23,6 +23,7 @@
     left: 20px;
     color: #fff;
     opacity: 0.6;
+    z-index: 10;
 }
 
 .menu-option {
@@ -123,6 +124,8 @@ body {
     transform: rotate(360deg);
 
 } */
+
+/* Fighter plane moving around the screen */
 .fighter {
     position: fixed;
     /* width: 120px;
@@ -133,7 +136,7 @@ body {
     animation-duration: 30s;
     animation-iteration-count: infinite;
     animation-direction: forwards;
-    z-index: -1;
+    z-index: -2;
 }
 
 @keyframes Fighter {
@@ -285,7 +288,10 @@ body {
     }
 }
 
+/* END :: Fighter plane */
 
+
+/* Random planes across screen from random directions before computer hit */
 .loading-sign {
     position: fixed;
     display: flex;
@@ -354,6 +360,123 @@ body {
 
     }
 }
+
+/* END :: Random planes across screen from random directions before computer hit */
+
+/* Random clouds moving on screen */
+
+.clouds-right,
+.clouds-right-2,
+.clouds-left,
+.clouds-left-2 {
+    position: fixed;
+}
+
+.clouds-right {
+    top: -400px;
+    left: 0;
+    color: #fff;
+    animation-name: CloudsFromRight1;
+    animation-duration: 120s;
+    animation-delay: 2s;
+    animation-iteration-count: infinite;
+    animation-direction: forwards;
+    z-index: -1;
+    opacity: 0.6;
+}
+
+@keyframes CloudsFromRight1 {
+    0% {
+        top: 12%;
+        left: calc(100vw + 50px);
+    }
+
+    100% {
+        top: 12%;
+        left: -450px;
+
+    }
+}
+
+.clouds-right-2 {
+    top: -400px;
+    left: 0;
+    color: #fff;
+    animation-name: CloudsFromRight2;
+    animation-duration: 120s;
+    animation-delay: 30s;
+    animation-iteration-count: infinite;
+    animation-direction: forwards;
+    z-index: -1;
+    opacity: 0.6;
+}
+
+@keyframes CloudsFromRight2 {
+    0% {
+        top: 20%;
+        left: calc(100vw + 50px);
+    }
+
+    100% {
+        top: 20%;
+        left: -550px;
+
+    }
+}
+
+.clouds-left {
+    top: -400px;
+    left: 0;
+    color: #fff;
+    animation-name: CloudsFromLeft1;
+    animation-duration: 100s;
+    animation-delay: 4s;
+    animation-iteration-count: infinite;
+    animation-direction: forwards;
+    z-index: -1;
+    opacity: 0.6;
+}
+
+@keyframes CloudsFromLeft1 {
+    0% {
+        top: 63%;
+        left: -550px;
+    }
+
+    100% {
+        top: 63%;
+        left: calc(100vw + 100px);
+
+    }
+}
+
+.clouds-left-2 {
+    top: -400px;
+    left: 0;
+    color: #fff;
+    animation-name: CloudsFromLeft2;
+    animation-duration: 100s;
+    animation-delay: 25s;
+    animation-iteration-count: infinite;
+    animation-direction: forwards;
+    z-index: -1;
+    opacity: 0.6;
+}
+
+@keyframes CloudsFromLeft2 {
+    0% {
+        top: 50%;
+        left: -450px;
+    }
+
+    100% {
+        top: 50%;
+        left: calc(100vw + 100px);
+
+    }
+}
+
+/* END ::Random clouds moving on screen */
 
 .main-container {
     width: 100%;

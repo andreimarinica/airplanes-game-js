@@ -47,13 +47,23 @@ let missedRand = 0;
 // size of the images based on the grid size - different for different screen sizes
 let planeSize = document.querySelector(".human-grid").clientWidth / 10 + "px";
 let smokeSize = document.querySelector(".human-grid").clientWidth / 10 - 5 + "px";
-let loadingSize = document.querySelector(".human-grid").clientWidth / 10 + "px";
+let loadingSize = document.querySelector(".human-grid").clientWidth + "px";
 // can use a random event below :: for now it will always go
 let fighterHeight = 70;
 let fighterWidth = 60;
+let cloudsHeight = 330;
+let cloudWidth = 470;
+let cloudRand = Math.floor(Math.random() * 4 + 1); // 1 - 4
 let movingPlane = 3;
 if (movingPlane % 3 === 0) {
     document.getElementById('fighter').innerHTML = `<img src="../img/fighter.png" alt="" width="${fighterWidth}" height="${fighterHeight}" class="fighter">`;
+    document.getElementById('clouds-right').innerHTML = `<img src="../img/clouds${cloudRand}.png" alt="" width="${cloudWidth}" height="${cloudsHeight}" class="clouds-right">`;
+    cloudRand = Math.floor(Math.random() * 4 + 1); // 1 - 4
+    document.getElementById('clouds-right-2').innerHTML = `<img src="../img/clouds${cloudRand}.png" alt="" width="${cloudWidth}" height="${cloudsHeight}" class="clouds-right-2">`;
+    cloudRand = Math.floor(Math.random() * 4 + 1); // 1 - 4
+    document.getElementById('clouds-left').innerHTML = `<img src="../img/clouds${cloudRand}.png" alt="" width="${cloudWidth}" height="${cloudsHeight}" class="clouds-left">`;
+    cloudRand = Math.floor(Math.random() * 4 + 1); // 1 - 4
+    document.getElementById('clouds-left-2').innerHTML = `<img src="../img/clouds${cloudRand}.png" alt="" width="${cloudWidth}" height="${cloudsHeight}" class="clouds-left-2">`;
 }
 
 
