@@ -15,6 +15,41 @@
     margin: auto;
 }
 
+#gameMenu {}
+
+.gameMenu {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    color: #fff;
+    opacity: 0.6;
+}
+
+.menu-option {
+    display: block;
+    text-decoration: none;
+    color: teal;
+    width: 30%;
+    margin: 1rem auto;
+    background: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+}
+
+.menu-icon {
+    margin-right: 5px;
+}
+
+.exit-no {
+    background: #e2b900 !important;
+    color: #fff !important;
+}
+
+.exit-yes {
+    background: #e22d00 !important;
+    color: #fff !important;
+}
+
 body {
     /* background: url('../img/bg.jpg') no-repeat center center/cover; */
     height: 100vh;

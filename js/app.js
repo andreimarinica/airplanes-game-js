@@ -79,6 +79,45 @@ window.addEventListener('click', function (event) {
 });
 // MODAL
 
+// gameMenu
+function gameMenu() {
+    modalText.innerHTML = `
+                <h1>GAME MENU</h1>
+                <p></p>
+                <p></p>
+                <a href="#" class="menu-option"><i class="fas fa-plane-departure menu-icon"></i> NEW GAME</a>
+                <a href="#" class="menu-option"><i class="fas fa-redo-alt menu-icon"></i> RESTART</a>
+                <a href="#" onclick="optionsMenu()" class="menu-option"><i class="fas fa-tools menu-icon"></i> OPTIONS</a>
+                <a href="#" class="menu-option">PLAY AGAIN</a>
+                <a href="#" onclick="exitTrue()" class="menu-option"><i class="fas fa-plane-arrival"></i> EXIT GAME</a>`;
+    modal.style.display = "flex";
+}
+
+function exitTrue() {
+    modalText.innerHTML = `
+                <h1>GAME MENU</h1>
+                <h3>ARE YOU SURE YOU WANT TO EXIT?</h3>
+                <a href="#" onclick="gameMenu()" class="play-again exit-no">NO</a>
+                <a href="#" onclick="window.close()" class="play-again exit-yes">YES</a>`;
+    modal.style.display = "flex";
+}
+
+function optionsMenu() {
+    if (tutorial === true) {
+        checkTutorial = `<a href="#" onclick="tutorialOff(); optionsMenu();" class="menu-option"><i class="fas fa-spell-check menu-icon"></i> TUTORIAL ON</a>`;
+    } else {
+        checkTutorial = `<a href="#" onclick="tutorialOn(); optionsMenu();" class="menu-option"><i class="fas fa-spell-check menu-icon"></i> TUTORIAL OFF</a>`;
+    }
+    modalText.innerHTML = `
+    <h1>OPTIONS</h1>
+    ${checkTutorial}
+    <a href="#" class="menu-option"><i class="fas fa-plane-departure menu-icon"></i> CHANGE NAME</a>
+    <a href="#" class="menu-option"><i class="fas fa-redo-alt menu-icon"></i> RESET SCORE</a>
+    <a href="#" onclick="gameMenu()" class="menu-option"><i class="fas fa-undo menu-icon"></i> GO BACK</a>`;
+    modal.style.display = "flex";
+}
+// gameMenu
+
 if (tutorial === true) {
     setTimeout(modalMessage, 100, "DRAW PLANES", "Click or touch an empty area from the first canvas (your canvas). This will be the head of your plane.", "It will show all available directions (green tiles). Continue by clicking in each cell of the chosen plane.");
 }
