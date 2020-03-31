@@ -177,11 +177,23 @@ function currentLevelStatus() {
         createPlayerBoard();
         showComputerBoard();
         document.querySelector("body").style.background = `url('../img/bg3.jpg') no-repeat center center/cover`;
+    } else if (currentLevel === 4) {
+        clearLevel();
+        createRandomHitArr();
+        createComputerBoard();
+        createComputerBoard();
+        createComputerBoard();
+        createComputerBoard();
+        createComputerBoard();
+        createPlayerBoard();
+        showComputerBoard();
+        document.querySelector("body").style.background = `url('../img/bg3.jpg') no-repeat center center/cover`;
     }
 }
 
 function nextLevel() {
     currentLevel++;
+    console.log(`Current Level: ${currentLevel}`);
     currentLevelStatus();
 }
 currentLevelStatus();
@@ -436,6 +448,7 @@ function playerHit(coordX, coordY) { // 3 head, 2 hit, 1 miss
                 document.getElementById(`${computerPlanes[i][0]}${computerPlanes[i][1]}`).innerHTML = `<img src="../img/flame.png" class="animate" alt="" width="${smokeSize}" height="${smokeSize}">`;
                 computerGrid[computerPlanes[i][0]][computerPlanes[i][1]] = 2;
             }
+            console.log("FIRST PLANE DOWN");
 
         }
         if (computerPlanes[8][0] === coordX && computerPlanes[8][1] === coordY) {
@@ -443,23 +456,36 @@ function playerHit(coordX, coordY) { // 3 head, 2 hit, 1 miss
                 document.getElementById(`${computerPlanes[i][0]}${computerPlanes[i][1]}`).innerHTML = `<img src="../img/flame.png" class="animate" alt="" width="${smokeSize}" height="${smokeSize}">`;
                 computerGrid[computerPlanes[i][0]][computerPlanes[i][1]] = 2;
             }
+            console.log("SECOND PLANE DOWN");
         }
-        if (currentLevel === 2) {
+        if (currentLevel === 2 || currentLevel === 3 || currentLevel === 4) {
             if (computerPlanes[16][0] === coordX && computerPlanes[16][1] === coordY) {
                 for (i = 16; i < 24; i++) {
                     document.getElementById(`${computerPlanes[i][0]}${computerPlanes[i][1]}`).innerHTML = `<img src="../img/flame.png" class="animate" alt="" width="${smokeSize}" height="${smokeSize}">`;
                     computerGrid[computerPlanes[i][0]][computerPlanes[i][1]] = 2;
                 }
             }
+            console.log("THIRD PLANE DOWN");
         }
 
-        if (currentLevel === 3) {
+        if (currentLevel === 3 || currentLevel === 4) {
             if (computerPlanes[24][0] === coordX && computerPlanes[24][1] === coordY) {
                 for (i = 24; i < 32; i++) {
                     document.getElementById(`${computerPlanes[i][0]}${computerPlanes[i][1]}`).innerHTML = `<img src="../img/flame.png" class="animate" alt="" width="${smokeSize}" height="${smokeSize}">`;
                     computerGrid[computerPlanes[i][0]][computerPlanes[i][1]] = 2;
                 }
             }
+            console.log("FOURTH PLANE DOWN");
+        }
+
+        if (currentLevel === 4) {
+            if (computerPlanes[32][0] === coordX && computerPlanes[32][1] === coordY) {
+                for (i = 32; i < 40; i++) {
+                    document.getElementById(`${computerPlanes[i][0]}${computerPlanes[i][1]}`).innerHTML = `<img src="../img/flame.png" class="animate" alt="" width="${smokeSize}" height="${smokeSize}">`;
+                    computerGrid[computerPlanes[i][0]][computerPlanes[i][1]] = 2;
+                }
+            }
+            console.log("FOURTH PLANE DOWN");
         }
         computerGrid[coordX][coordY] = 3;
         transfromChosenAirplaneComputer();
