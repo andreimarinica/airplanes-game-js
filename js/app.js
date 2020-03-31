@@ -45,6 +45,11 @@ let waitingForReturn = false;
 let ok = 0;
 let tutorial = true;
 let missedRand = 0;
+// Points System
+let lvlOnePoints = 0;
+let lvlTwoPoints = 0;
+let lvlThreePoints = 0;
+let lvlFourPoints = 0;
 // size of the images based on the grid size - different for different screen sizes
 let planeSize = document.querySelector(".human-grid").clientWidth / 10 + "px";
 let smokeSize = document.querySelector(".human-grid").clientWidth / 10 - 5 + "px";
@@ -157,7 +162,9 @@ function currentLevelStatus() {
         createComputerBoard();
         createPlayerBoard();
         showComputerBoard();
+        placeTreasure();
         document.querySelector("body").style.background = `url('../img/bg1.jpg') no-repeat center center/cover`;
+        updateScoreBoard();
     } else if (currentLevel === 2) {
         clearLevel();
         createRandomHitArr();
@@ -166,7 +173,9 @@ function currentLevelStatus() {
         createComputerBoard();
         createPlayerBoard();
         showComputerBoard();
+        placeTreasure();
         document.querySelector("body").style.background = `url('../img/bg2.jpg') no-repeat center center/cover`;
+        updateScoreBoard();
     } else if (currentLevel === 3) {
         clearLevel();
         createRandomHitArr();
@@ -176,7 +185,9 @@ function currentLevelStatus() {
         createComputerBoard();
         createPlayerBoard();
         showComputerBoard();
+        placeTreasure();
         document.querySelector("body").style.background = `url('../img/bg3.jpg') no-repeat center center/cover`;
+        updateScoreBoard();
     } else if (currentLevel === 4) {
         clearLevel();
         createRandomHitArr();
@@ -187,8 +198,46 @@ function currentLevelStatus() {
         createComputerBoard();
         createPlayerBoard();
         showComputerBoard();
+        placeTreasure();
         document.querySelector("body").style.background = `url('../img/bg3.jpg') no-repeat center center/cover`;
+        updateScoreBoard();
+    } else {
+        if (currentLevel === 5) {
+            // end game message and stats
+            // 
+
+            // TODO: add stats after each level
+            let totalPoints = lvlOnePoints + lvlTwoPoints + lvlThreePoints + lvlFourPoints;
+            modalText.innerHTML = `
+                <h1>CONGRATULATIONS!!!</h1>
+                <p>You have managed to beat all the levels of the game</p>
+                <p>Scoreboard:</p>
+                <p>LEVEL 1: ${lvlOnePoints} / TOTAL AVAILABLE points.</p>
+                <p>LEVEL 2: ${lvlTwoPoints} / TOTAL AVAILABLE points.</p>
+                <p>LEVEL 3: ${lvlThreePoints} / TOTAL AVAILABLE points.</p>
+                <p>LEVEL 4: ${lvlFourPoints} / TOTAL AVAILABLE points.</p>
+                <p>TOTAL: ${totalPoints} / TOTAL AVAILABLE points.</p>
+                <a href="#" class="menu-option"><i class="fas fa-plane-departure menu-icon"></i> RESTART PROGRESS</a>
+                <a href="#" onclick="exitTrue()" class="menu-option"><i class="fas fa-plane-arrival"></i> EXIT GAME</a>`;
+            modal.style.display = "flex";
+        }
     }
+}
+
+function placeTreasure() {
+    let checker = false;
+    while (checker === false) {
+        let i = Math.floor(Math.random() * 10 + 1);
+        let j = Math.floor(Math.random() * 10 + 1);
+        if (computerGrid[i][j] === "") {
+            checker = true;
+            computerGrid[i][j] = "T";
+            console.log(`${i} ++++ ${j}`);
+        }
+
+    }
+
+
 }
 
 function nextLevel() {
@@ -347,12 +396,22 @@ function checkGameOverComp(gridT) {
 }
 
 function checkWinner(gridA, gridB) {
+    let noOfPoints;
     for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 10; j++) {
             if (gridA[i][j] === "X" || gridA[i][j] === "O" || gridA[i][j] === "Y" || gridA[i][j] === "P") {
+                if (currentLevel === 1) {
+                    noOfPoints = lvlOnePoints;
+                } else if (currentLevel === 2) {
+                    noOfPoints = lvlTwoPoints;
+                } else if (currentLevel === 3) {
+                    noOfPoints = lvlThreePoints;
+                } else if (currentLevel === 4) {
+                    noOfPoints = lvlFourPoints;
+                }
                 modalText.innerHTML = `
                 <h1>ENEMY DOWN</h1>
-                <p>${playerName}, you won this battle gaining NO_OF_POINTS</p>
+                <p>${playerName}, you won this battle gaining ${noOfPoints} points in level ${currentLevel}.</p>
                 <p>Please choose your next move.</p>
                 <a href="#" class="play-again" onclick="currentLevelStatus(); closeModal();">RESTART LEVEL</a>
                 <a href="#" class="play-again" onclick="nextLevel(); closeModal();">NEXT LEVEL</a>`;
@@ -433,14 +492,65 @@ function createComputerBoard() {
     }
 }
 
+function updateScoreBoard() {
+    let levelPoints = 0;
+    if (currentLevel === 1) {
+        levelPoints = lvlOnePoints;
+    } else if (currentLevel === 2) {
+        levelPoints = lvlTwoPoints;
+    } else if (currentLevel === 3) {
+        levelPoints = lvlThreePoints;
+    } else if (currentLevel === 4) {
+        levelPoints = lvlFourPoints;
+    }
+    document.getElementById("score-board").innerHTML = `
+    <div class="score-board">
+    <h1>LEVEL ${currentLevel} | POINTS ${levelPoints}</h1>
+    </div>`;
+}
+
+// plane hit
 
 function playerHit(coordX, coordY) { // 3 head, 2 hit, 1 miss
-    if (computerGrid[coordX][coordY] === "X" || computerGrid[coordX][coordY] === "Y") {
+    if (computerGrid[coordX][coordY] === "T") {
+        console.log("TREASURE FOUND");
+        let treasure = Math.floor(Math.random() * 350 + 1);
+        console.log(treasure);
+        switch (currentLevel) {
+            case 1:
+                lvlOnePoints = lvlOnePoints + treasure;
+                break;
+            case 2:
+                lvlTwoPoints = lvlTwoPoints + treasure;
+                break;
+            case 3:
+                lvlThreePoints = lvlThreePoints + treasure;
+                break;
+            case 4:
+                lvlFourPoints = lvlFourPoints + treasure;
+
+        }
+        document.getElementById(`${coordX}${coordY}`).style.background = `url('../img/treasure.png') no-repeat center/${planeSize} ${planeSize}`;
+    } else if (computerGrid[coordX][coordY] === "X" || computerGrid[coordX][coordY] === "Y") {
         document.getElementById(`${coordX}${coordY}`).innerHTML = `<img src="../img/flame.png" class="animate" alt="" width="${smokeSize}" height="${smokeSize}">`;
         computerGrid[coordX][coordY] = 2;
         playersTurn = false;
         computersTurn = true;
         playerHitCount++;
+        switch (currentLevel) {
+            case 1:
+                lvlOnePoints = lvlOnePoints + 10; // 10 points for a hit
+                break;
+            case 2:
+                lvlTwoPoints = lvlTwoPoints + 15; // 15 points for a hit
+                break;
+            case 3:
+                lvlThreePoints = lvlThreePoints + 20; // 20 points for a hit
+                break;
+            case 4:
+                lvlFourPoints = lvlFourPoints + 25; // 25 points for a hit
+
+        }
     } else if (computerGrid[coordX][coordY] === "O" || computerGrid[coordX][coordY] === "P") {
         // if head hit :: check which plane and draw the whole plane
         if (computerPlanes[0][0] === coordX && computerPlanes[0][1] === coordY) {
@@ -485,8 +595,26 @@ function playerHit(coordX, coordY) { // 3 head, 2 hit, 1 miss
                     computerGrid[computerPlanes[i][0]][computerPlanes[i][1]] = 2;
                 }
             }
-            console.log("FOURTH PLANE DOWN");
+            console.log("FIFTH PLANE DOWN");
         }
+
+        switch (currentLevel) {
+            case 1:
+                lvlOnePoints = lvlOnePoints + 125; // 125 points for a head
+                break;
+            case 2:
+                lvlTwoPoints = lvlTwoPoints + 250; // 250 points for a head
+                break;
+            case 3:
+                lvlThreePoints = lvlThreePoints + 375; // 375 points for a head
+                break;
+            case 4:
+                lvlFourPoints = lvlFourPoints + 400; // 400 points for a hit
+
+        }
+
+
+
         computerGrid[coordX][coordY] = 3;
         transfromChosenAirplaneComputer();
         checkGameOverComp(computerGrid);
@@ -506,6 +634,7 @@ function playerHit(coordX, coordY) { // 3 head, 2 hit, 1 miss
         }
     }
     waitingForReturn = false;
+    updateScoreBoard();
 }
 
 function removeHitArrLocations() {

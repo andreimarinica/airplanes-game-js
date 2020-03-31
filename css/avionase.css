@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Anton&display=swap');
 
 * {
     padding: 0;
@@ -114,6 +115,24 @@ body {
     background: #fff;
     padding: 0.5rem 1rem;
     border-radius: 10px;
+}
+
+/* Score Board */
+#score-board {}
+
+.score-board {
+    position: fixed;
+    top: 0;
+    left: calc(50vw - 86.5px);
+    text-align: center;
+    font-size: 0.45rem;
+    font-family: 'Roboto', sans-serif;
+    background: #005c57;
+    color: #fff;
+    padding: 0.5rem 1.5rem;
+    border-bottom-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    opacity: 0.6;
 }
 
 /* MODAAAAL */
@@ -846,5 +865,9 @@ span {
 
     #message {
         display: none;
+    }
+
+    .menu-option {
+        width: 100%;
     }
 }
