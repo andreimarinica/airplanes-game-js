@@ -11,7 +11,7 @@ function placeTreasure() {
     }
 }
 
-currentLevelStatus();
+
 
 // if (tutorial === true) {
 //     setTimeout(modalMessage, 100, "DRAW PLANES", "Click or touch an empty area from the first canvas (your canvas). This will be the head of your plane.", "It will show all available directions (green tiles). Continue by clicking in each cell of the chosen plane.");

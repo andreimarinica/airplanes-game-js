@@ -149,3 +149,23 @@ function restartLevel() {
     currentLevelStatus();
     updateScoreBoard();
 }
+
+function newGame() {
+    if (lsFirstVisit.length === 0) {
+        playerName = document.getElementById("name").value;
+        tutorial = true;
+        closeModal();
+    } else {
+        currentLevel = 1;
+        lvlOnePoints = 0;
+        lvlTwoPoints = 0;
+        lvlThreePoints = 0;
+        lvlFourPoints = 0;
+        currentLevelStatus();
+        updateScoreBoard();
+    }
+}
+
+function changePlayer() {
+
+}

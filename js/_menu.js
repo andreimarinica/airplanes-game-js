@@ -3,8 +3,8 @@ function gameMenu() {
     modalText.innerHTML = `
                 <a href="#" class="close-button" onclick="closeModal()"><i class="fas fa-window-close"></i></a>
                 <h1>GAME MENU</h1>
-                <a href="#" class="menu-option">CONTINUE</a>
                 <a href="#" class="menu-option"><i class="fas fa-plane-departure menu-icon"></i> NEW GAME</a>
+                <a href="#" class="menu-option"> CHANGE PLAYER</a>
                 <a href="#" class="menu-option"><i class="fas fa-redo-alt menu-icon"></i> RESTART</a>
                 <a href="#" onclick="optionsMenu()" class="menu-option"><i class="fas fa-tools menu-icon"></i> OPTIONS</a>
                 <a href="#" onclick="exitTrue()" class="menu-option"><i class="fas fa-plane-arrival"></i> EXIT GAME</a>`;
