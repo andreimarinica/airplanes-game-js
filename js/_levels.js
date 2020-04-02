@@ -1,23 +1,3 @@
-function clearViews() {
-    for (let i = 0; i < 10; i++) {
-        for (let j = 0; j < 10; j++) {
-            if (playerGrid[i][j] === "") {
-                // If it's empty (and will be) clear the backgrounds (airplanes) and any hit marks
-                document.getElementById(`${i}-${j}`).style.background = "";
-                document.getElementById(`${i}-${j}`).innerHTML = "";
-            }
-            if (computerGrid[i][j] === "") {
-                // If it's empty (and will be) clear the backgrounds (airplanes) and any hit marks
-                document.getElementById(`${i}${j}`).style.background = "";
-                document.getElementById(`${i}${j}`).innerHTML = "";
-            }
-        }
-    }
-    // Clear all the inserted grid cells 
-    document.getElementById("playerGrid").innerHTML = "";
-    document.getElementById("computerGrid").innerHTML = "";
-}
-
 function clearLevel() {
     // reset all vars to original state
     playerGrid = [
@@ -76,13 +56,34 @@ function clearLevel() {
     clearViews();
 }
 
-let currentLevel = 1;
+function clearViews() {
+    for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 10; j++) {
+            if (playerGrid[i][j] === "") {
+                // If it's empty (and will be) clear the backgrounds (airplanes) and any hit marks
+                document.getElementById(`${i}-${j}`).style.background = "";
+                document.getElementById(`${i}-${j}`).innerHTML = "";
+            }
+            if (computerGrid[i][j] === "") {
+                // If it's empty (and will be) clear the backgrounds (airplanes) and any hit marks
+                document.getElementById(`${i}${j}`).style.background = "";
+                document.getElementById(`${i}${j}`).innerHTML = "";
+            }
+        }
+    }
+    // Clear all the inserted grid cells 
+    document.getElementById("playerGrid").innerHTML = "";
+    document.getElementById("computerGrid").innerHTML = "";
+}
+
+
 
 function currentLevelStatus() {
     if (currentLevel === 1) {
-        if (action === true) {
+        if (action === true || stuffInitialized === true) {
             clearLevel();
         }
+        stuffInitialized = true;
         createRandomHitArr();
         createComputerPlanes();
         //createComputerPlanes();
@@ -133,6 +134,7 @@ function currentLevelStatus() {
 function nextLevel() {
     currentLevel++;
     console.log(`Current Level: ${currentLevel}`);
+    localStorageUpdate();
     currentLevelStatus();
 }
 
@@ -150,22 +152,44 @@ function restartLevel() {
     updateScoreBoard();
 }
 
+function continueFromLast() {
+    currentLevel = lsScoreBoard[0].level;
+    currentLevelStatus();
+    updateScoreBoard();
+    closeModal();
+}
+
 function newGame() {
-    if (lsFirstVisit.length === 0) {
+    if (lsScoreBoard.length === 0) {
         playerName = document.getElementById("name").value;
-        tutorial = true;
-        closeModal();
+        localStorageInit();
+    } else
+    if (newPlayer === true) {
+        playerName = document.getElementById("name").value;
+        localStorageInit();
+        newPlayer = false;
     } else {
-        currentLevel = 1;
-        lvlOnePoints = 0;
-        lvlTwoPoints = 0;
-        lvlThreePoints = 0;
-        lvlFourPoints = 0;
-        currentLevelStatus();
-        updateScoreBoard();
+        playerName = lsScoreBoard[0].name;
     }
+    currentLevel = 1;
+    lvlOnePoints = 0;
+    lvlTwoPoints = 0;
+    lvlThreePoints = 0;
+    lvlFourPoints = 0;
+    currentLevelStatus();
+    updateScoreBoard();
+    closeModal();
 }
 
 function changePlayer() {
+    newPlayer = true;
+    currentLevel = 1;
+    lvlOnePoints = 0;
+    lvlTwoPoints = 0;
+    lvlThreePoints = 0;
+    lvlFourPoints = 0;
+    currentLevelStatus();
+    updateScoreBoard();
+    welcomeScreen();
 
 }

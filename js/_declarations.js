@@ -37,6 +37,7 @@ let selectedItem;
 let randomHitArr = [];
 let computerPlanes = [];
 let playerPlanes = [];
+let currentLevel = 1;
 let availableDirections = [];
 let action = false;
 let planeParts = 0;
@@ -46,7 +47,7 @@ let playerHitCount = 0;
 let computerHitCount = 0;
 let playersTurn = true;
 let computersTurn = false;
-let playerName = "";
+let playerName;
 let waitingForReturn = false;
 let ok = 0;
 let tutorial = true;
@@ -89,15 +90,6 @@ let testUp = false;
 let testRight = false;
 let testDown = false;
 let testLeft = false;
+let newPlayer = false;
 
-// local storage keys
-
-const LOCAL_STORAGE_TUTORIAL_KEY = "airplanes.js.am.tutorial";
-const LOCAL_STORAGE_LEVEL_KEY = "airplanes.js.am.level";
-const LOCAL_STORAGE_SCOREBOARD_KEY = "airplanes.js.am.scoreboard";
-const LOCAL_STORAGE_FIRSTVISIT_KEY = "airplanes.js.am.firstvisit";
-
-let lsTutorial = JSON.parse(localStorage.getItem(LOCAL_STORAGE_TUTORIAL_KEY)) || [];
-let lsLevel = JSON.parse(localStorage.getItem(LOCAL_STORAGE_LEVEL_KEY)) || [];
-let lsScoreboard = JSON.parse(localStorage.getItem(LOCAL_STORAGE_SCOREBOARD_KEY)) || [];
-let lsFirstVisit = JSON.parse(localStorage.getItem(LOCAL_STORAGE_FIRSTVISIT_KEY)) || [];
+let stuffInitialized;

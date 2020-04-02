@@ -3,11 +3,24 @@ function gameMenu() {
     modalText.innerHTML = `
                 <a href="#" class="close-button" onclick="closeModal()"><i class="fas fa-window-close"></i></a>
                 <h1>GAME MENU</h1>
-                <a href="#" class="menu-option"><i class="fas fa-plane-departure menu-icon"></i> NEW GAME</a>
-                <a href="#" class="menu-option"> CHANGE PLAYER</a>
+                <a href="#" onclick="newGame()" class="menu-option"><i class="fas fa-plane-departure menu-icon"></i> NEW GAME</a>
+                <a href="#" onclick="changePlayer()" class="menu-option"><i class="fas fa-plane-departure menu-icon"></i> CHANGE PLAYER</a>
                 <a href="#" class="menu-option"><i class="fas fa-redo-alt menu-icon"></i> RESTART</a>
                 <a href="#" onclick="optionsMenu()" class="menu-option"><i class="fas fa-tools menu-icon"></i> OPTIONS</a>
+                <a href="#" onclick="scoreBoard()" class="menu-option"><i class="fas fa-tools menu-icon"></i> SCORE</a>
                 <a href="#" onclick="exitTrue()" class="menu-option"><i class="fas fa-plane-arrival"></i> EXIT GAME</a>`;
+    modal.style.display = "flex";
+}
+
+function scoreBoard() {
+    lsScoreBoard = JSON.parse(localStorage.getItem(LOCAL_STORAGE_SCOREBOARD_KEY)) || [];
+    let tempStr;
+    for (i = 0; i < lsScoreBoard.length; i++) {
+        tempStr += `<p>${i}: ${lsScoreBoard[i].name} - ${lsScoreBoard[i].level} - ${lsScoreBoard[i].score} - ${lsScoreBoard[i].date}</p>`;
+    }
+    modalText.innerHTML = `<h1>SCOREBOARD</h1>
+                            ${tempStr}
+                            <a href="#" onclick="closeModal()" class="menu-option"><i class="fas fa-plane-arrival"></i> CLOSE</a>`;
     modal.style.display = "flex";
 }
 
@@ -93,4 +106,25 @@ function modalMessage(title, messageOne, messageTwo) {
                 <p>${messageTwo}</p>
                 ${checkTutorial}`;
     modal.style.display = "flex";
+}
+
+function welcomeScreen() {
+    if (lsScoreBoard.length === 0 || newPlayer === true) {
+        modalText.innerHTML = `
+        <h1>WELCOME</h1>
+        <form action="" class="form" id="form">
+            <input type="text" name="name" id="name" class="menu-option" placeholder="Please enter your name">
+        </form>
+        <a href="#" class="menu-option" onclick="newGame()"><i class="fas fa-plane-departure menu-icon"></i> NEW GAME</a>`;
+        modal.style.display = "flex";
+    } else {
+        modalText.innerHTML = `
+        <h1>WELCOME</h1>
+        <p>Welcome back, ${lsScoreBoard[0].name}</p>
+        <p>What would you like to do?</p>
+        <a href="#" class="menu-option" onclick="continueFromLast()"><i class="fas fa-plane-departure menu-icon"></i> CONTINUE</a>
+        <a href="#" class="menu-option" onclick="newGame()"><i class="fas fa-plane-departure menu-icon"></i> NEW GAME</a>
+        <a href="#" class="menu-option" onclick="changePlayer()"><i class="fas fa-plane-departure menu-icon"></i> NEW PLAYER</a>`;
+        modal.style.display = "flex";
+    }
 }
