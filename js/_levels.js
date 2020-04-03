@@ -150,10 +150,12 @@ function restartLevel() {
     }
     currentLevelStatus();
     updateScoreBoard();
+    closeModal();
 }
 
 function continueFromLast() {
     currentLevel = lsScoreBoard[0].level;
+    playerName = lsScoreBoard[0].name;
     currentLevelStatus();
     updateScoreBoard();
     closeModal();

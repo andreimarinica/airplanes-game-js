@@ -51,3 +51,9 @@ function localStorageUpdate() {
     lsScoreBoard[0].date = date;
     localStorage.setItem(LOCAL_STORAGE_SCOREBOARD_KEY, JSON.stringify(lsScoreBoard));
 }
+
+function localStorageReset() {
+    lsScoreBoard = [];
+    localStorage.setItem(LOCAL_STORAGE_SCOREBOARD_KEY, JSON.stringify(lsScoreBoard));
+    welcomeScreen();
+}

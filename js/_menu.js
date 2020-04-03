@@ -4,23 +4,90 @@ function gameMenu() {
                 <a href="#" class="close-button" onclick="closeModal()"><i class="fas fa-window-close"></i></a>
                 <h1>GAME MENU</h1>
                 <a href="#" onclick="newGame()" class="menu-option"><i class="fas fa-plane-departure menu-icon"></i> NEW GAME</a>
-                <a href="#" onclick="changePlayer()" class="menu-option"><i class="fas fa-plane-departure menu-icon"></i> CHANGE PLAYER</a>
-                <a href="#" class="menu-option"><i class="fas fa-redo-alt menu-icon"></i> RESTART</a>
+                <a href="#" onclick="changePlayer()" class="menu-option"><i class="fas fa-exchange-alt menu-icon"></i> CHANGE PLAYER</a>
+                <a href="#" onclick="restartLevel()" class="menu-option"><i class="fas fa-redo-alt menu-icon"></i> RESTART</a>
                 <a href="#" onclick="optionsMenu()" class="menu-option"><i class="fas fa-tools menu-icon"></i> OPTIONS</a>
-                <a href="#" onclick="scoreBoard()" class="menu-option"><i class="fas fa-tools menu-icon"></i> SCORE</a>
-                <a href="#" onclick="exitTrue()" class="menu-option"><i class="fas fa-plane-arrival"></i> EXIT GAME</a>`;
+                <a href="#" onclick="scoreBoard()" class="menu-option"><i class="far fa-chart-bar menu-icon"></i> SCORE BOARD</a>
+                <a href="#" onclick="exitTrue()" class="menu-option"><i class="fas fa-plane-arrival menu-icon"></i> EXIT GAME</a>`;
     modal.style.display = "flex";
 }
 
 function scoreBoard() {
     lsScoreBoard = JSON.parse(localStorage.getItem(LOCAL_STORAGE_SCOREBOARD_KEY)) || [];
-    let tempStr;
-    for (i = 0; i < lsScoreBoard.length; i++) {
-        tempStr += `<p>${i}: ${lsScoreBoard[i].name} - ${lsScoreBoard[i].level} - ${lsScoreBoard[i].score} - ${lsScoreBoard[i].date}</p>`;
+    //MAXIMUM SCORE VALUE TESTING 
+
+    // get old array of objects from local storage
+    let oldArr = JSON.parse(localStorage.getItem(LOCAL_STORAGE_SCOREBOARD_KEY)) || [];
+    // create a new empty array
+    let newArr = [];
+    // how many times we need to go through finding the maximum score
+    let i = oldArr.length;
+    while (i > 0) {
+        // find the maximum .score
+        let result = Math.max.apply(Math, oldArr.map(function (o) {
+            return o.score;
+        }));
+        // find the object that is holding the maximum score
+        let objectResulted = oldArr.find(function (o) {
+            if (o.score === result) {
+                // return the object found or if only one left return that one
+                return o.score || oldArr[0];
+            }
+        });
+        // show only biggest 10 scores
+        if (newArr.length < 10) {
+            // push max found into new array
+            newArr.push(objectResulted);
+        }
+        // go through the old array and find the one that was pushed into new array by .date and remove it
+        for (j = 0; j < oldArr.length; j++) {
+            if (objectResulted.date === oldArr[j].date) {
+                oldArr.splice(j, 1);
+                break;
+            }
+        }
+        i--;
     }
+    //MAXIMUM SCORE VALUE TESTING
+
+    // temporary string to hold all values
+    let tempStr;
+    if (newArr.length > 0) {
+        // first value from the newarray assigned manually
+        tempStr = `<tr>
+                        <td>${1}</td> 
+                        <td>${newArr[0].name}</td> 
+                        <td>${newArr[0].level}</td> 
+                        <td>${newArr[0].score}</td> 
+                        <td>${newArr[0].date}</td>
+                    </tr>`;
+        // all other values automatically added
+        for (i = 1; i < newArr.length; i++) {
+            tempStr += `<tr> 
+                            <td>${i+1}</td> 
+                            <td>${newArr[i].name}</td> 
+                            <td>${newArr[i].level}</td> 
+                            <td>${newArr[i].score}</td> 
+                            <td>${newArr[i].date}</td>
+                        </tr>`;
+        }
+    } else {
+        tempStr = `No available stats recorded.`;
+    }
+    // show the results in the modal
     modalText.innerHTML = `<h1>SCOREBOARD</h1>
-                            ${tempStr}
-                            <a href="#" onclick="closeModal()" class="menu-option"><i class="fas fa-plane-arrival"></i> CLOSE</a>`;
+                            <table id="score-stats">
+                                <tr>
+                                    <th>Place</th>
+                                    <th>Player Name</th>
+                                    <th>Level</th>
+                                    <th>Score</th>
+                                    <th>Date</th>
+                                </tr>
+                                ${tempStr}
+                            </table>
+                            
+                            <a href="#" onclick="closeModal()" class="menu-option"><i class="fas fa-plane-arrival menu-icon"></i> CLOSE</a>`;
     modal.style.display = "flex";
 }
 
@@ -44,17 +111,16 @@ function optionsMenu() {
     }
 
     if (animationMode === true) {
-        animationStatus = `<a href="#" onclick="animationOff(); optionsMenu();" class="menu-option"><i class="fas fa-spell-check menu-icon"></i> ANIMATION ON</a>`;
+        animationStatus = `<a href="#" onclick="animationOff(); optionsMenu();" class="menu-option"><i class="fas fa-fighter-jet menu-icon"></i> ANIMATION ON</a>`;
     } else {
-        animationStatus = `<a href="#" onclick="animationOn(); optionsMenu();" class="menu-option"><i class="fas fa-spell-check menu-icon"></i> ANIMATION OFF</a>`;
+        animationStatus = `<a href="#" onclick="animationOn(); optionsMenu();" class="menu-option"><i class="fas fa-fighter-jet menu-icon"></i> ANIMATION OFF</a>`;
     }
     modalText.innerHTML = `
     <a href="#" class="close-button" onclick="closeModal()"><i class="fas fa-window-close"></i></a>
     <h1>OPTIONS</h1>
     ${checkTutorial}
     ${animationStatus}
-    <a href="#" class="menu-option"><i class="fas fa-redo-alt menu-icon"></i> RESET SCORE</a>
-    <a href="#" class="menu-option"><i class="fas fa-redo-alt menu-icon"></i> SOUND OFF</a>
+    <a href="#" onclick="localStorageReset()" class="menu-option"><i class="fas fa-redo-alt menu-icon"></i> RESET ALL STATS</a>
     <a href="#" class="menu-option"><i class="fas fa-redo-alt menu-icon"></i> GRID LINES OFF</a>
     <a href="#" onclick="gameMenu()" class="menu-option"><i class="fas fa-undo menu-icon"></i> GO BACK</a>`;
     modal.style.display = "flex";
