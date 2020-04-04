@@ -1,6 +1,6 @@
 function placeTreasure() {
     let checker = false;
-    while (checker === false) {
+    while (!checker) {
         let i = Math.floor(Math.random() * 10);
         let j = Math.floor(Math.random() * 10);
         if (computerGrid[i][j] === "") {
@@ -10,7 +10,6 @@ function placeTreasure() {
         }
     }
 }
-
 
 
 // if (tutorial === true) {
@@ -90,15 +89,11 @@ function checkWinner(gridA, gridB) {
                     modalText.innerHTML = `
                 <h1>CONGRATULATIONS!!!</h1>
                 <p>You have managed to beat all the levels of the game.</p>
-                <p>Scoreboard:</p>
-                <p>LEVEL 1: ${lvlOnePoints} / TOTAL AVAILABLE points.</p>
-                <p>LEVEL 2: ${lvlTwoPoints} / TOTAL AVAILABLE points.</p>
-                <p>LEVEL 3: ${lvlThreePoints} / TOTAL AVAILABLE points.</p>
-                <p>LEVEL 4: ${lvlFourPoints} / TOTAL AVAILABLE points.</p>
-                <p>TOTAL: ${totalPoints} / TOTAL AVAILABLE points.</p>
-                <a href="#" class="menu-option"><i class="fas fa-plane-departure menu-icon"></i> RESTART PROGRESS</a>
+                <a href="#" onclick="changePlayer()" class="menu-option"><i class="fas fa-exchange-alt menu-icon"></i> NEW GAME</a>
+                <a href="#" onclick="scoreBoard()" class="menu-option"><i class="far fa-chart-bar menu-icon"></i> SCORE BOARD</a>
                 <a href="#" onclick="exitTrue()" class="menu-option"><i class="fas fa-plane-arrival"></i> EXIT GAME</a>`;
                     modal.style.display = "flex";
+                    endGame = true;
                 }
                 break;
             }
@@ -167,48 +162,65 @@ function createComputerPlanes() {
 function playerHit(coordX, coordY) { // 3 head, 2 hit, 1 miss
     if (computerGrid[coordX][coordY] === "T") {
         console.log("TREASURE FOUND");
-        let treasure = Math.floor(Math.random() * 350 + 1);
+        computerGrid[coordX][coordY] = 2;
+        // treasure value -- to be fixed for a better comparison between players
+        let treasure; // =Math.floor(Math.random() * 350 + 1);
         console.log(treasure);
         switch (currentLevel) {
             case 1:
+                treasure = 157;
                 lvlOnePoints = lvlOnePoints + treasure;
                 break;
             case 2:
+                treasure = 289;
                 lvlTwoPoints = lvlTwoPoints + treasure;
                 break;
             case 3:
+                treasure = 410;
                 lvlThreePoints = lvlThreePoints + treasure;
                 break;
             case 4:
+                treasure = 522;
                 lvlFourPoints = lvlFourPoints + treasure;
 
         }
+        showAddedScore(treasure);
+        setTimeout(hideAddedScore, 5500);
         document.getElementById(`${coordX}${coordY}`).style.background = `url('../img/treasure.png') no-repeat center/${planeSize} ${planeSize}`;
+        document.getElementById(`${coordX}${coordY}`).style.border = `1px solid yellow`;
     } else if (computerGrid[coordX][coordY] === "X" || computerGrid[coordX][coordY] === "Y") {
         document.getElementById(`${coordX}${coordY}`).innerHTML = `<img src="../img/flame.png" class="animate" alt="" width="${smokeSize}" height="${smokeSize}">`;
+        // document.getElementById(`${coordX}${coordY}`).style.border = `1px solid red`;
         computerGrid[coordX][coordY] = 2;
         playersTurn = false;
         computersTurn = true;
         playerHitCount++;
         switch (currentLevel) {
             case 1:
-                lvlOnePoints = lvlOnePoints + 10; // 10 points for a hit
+                scoreAdded = 10;
+                lvlOnePoints = lvlOnePoints + scoreAdded; // 10 points for a hit
                 break;
             case 2:
-                lvlTwoPoints = lvlTwoPoints + 15; // 15 points for a hit
+                scoreAdded = 15;
+                lvlTwoPoints = lvlTwoPoints + scoreAdded; // 15 points for a hit
                 break;
             case 3:
-                lvlThreePoints = lvlThreePoints + 20; // 20 points for a hit
+                scoreAdded = 20;
+                lvlThreePoints = lvlThreePoints + scoreAdded; // 20 points for a hit
                 break;
             case 4:
-                lvlFourPoints = lvlFourPoints + 25; // 25 points for a hit
+                scoreAdded = 25;
+                lvlFourPoints = lvlFourPoints + scoreAdded; // 25 points for a hit
 
         }
+        showAddedScore(scoreAdded);
+        setTimeout(hideAddedScore, 5500);
     } else if (computerGrid[coordX][coordY] === "O" || computerGrid[coordX][coordY] === "P") {
         // if head hit :: check which plane and draw the whole plane
         if (computerPlanes[0][0] === coordX && computerPlanes[0][1] === coordY) {
             for (i = 0; i < 8; i++) {
                 document.getElementById(`${computerPlanes[i][0]}${computerPlanes[i][1]}`).innerHTML = `<img src="../img/flame.png" class="animate" alt="" width="${smokeSize}" height="${smokeSize}">`;
+                // document.getElementById(`${computerPlanes[i][0]}${computerPlanes[i][1]}`).style.border = "";
                 computerGrid[computerPlanes[i][0]][computerPlanes[i][1]] = 2;
             }
             console.log("FIRST PLANE DOWN");
@@ -253,18 +265,24 @@ function playerHit(coordX, coordY) { // 3 head, 2 hit, 1 miss
 
         switch (currentLevel) {
             case 1:
-                lvlOnePoints = lvlOnePoints + 125; // 125 points for a head
+                scoreAdded = 125;
+                lvlOnePoints = lvlOnePoints + scoreAdded; // 125 points for a head
                 break;
             case 2:
-                lvlTwoPoints = lvlTwoPoints + 250; // 250 points for a head
+                scoreAdded = 250;
+                lvlTwoPoints = lvlTwoPoints + scoreAdded; // 250 points for a head
                 break;
             case 3:
-                lvlThreePoints = lvlThreePoints + 375; // 375 points for a head
+                scoreAdded = 375;
+                lvlThreePoints = lvlThreePoints + scoreAdded; // 375 points for a head
                 break;
             case 4:
-                lvlFourPoints = lvlFourPoints + 400; // 400 points for a hit
+                scoreAdded = 400;
+                lvlFourPoints = lvlFourPoints + scoreAdded; // 400 points for a hit
 
         }
+        showAddedScore(scoreAdded);
+        setTimeout(hideAddedScore, 5500);
 
         computerGrid[coordX][coordY] = 3;
         transfromChosenAirplaneComputer();
@@ -277,6 +295,7 @@ function playerHit(coordX, coordY) { // 3 head, 2 hit, 1 miss
     } else {
         missedRand = Math.floor(Math.random() * 3 + 1);
         document.getElementById(`${coordX}${coordY}`).innerHTML = `<img src="../img/missed${missedRand}.png" class="animate" alt="" width="${smokeSize}" height="${smokeSize}">`;
+        // document.getElementById(`${coordX}${coordY}`).style.border = `1px solid orange`;
         if (gameOver === false) {
             computerGrid[coordX][coordY] = 1;
             playersTurn = false;
@@ -447,6 +466,7 @@ function computerHit() {
     } else {
         missedRand = Math.floor(Math.random() * 3 + 1);
         document.getElementById(`${randomHitArr[x][0]}-${randomHitArr[x][1]}`).innerHTML = `<img src="../img/missed${missedRand}.png" alt="" class="animate" width="${smokeSize}" height="${smokeSize}">`;
+        // document.getElementById(`${randomHitArr[x][0]}-${randomHitArr[x][1]}`).style.border = `1px solid orange`;
         didLastOneHit = false;
         if (gameOver === false) {
             playersTurn = true;

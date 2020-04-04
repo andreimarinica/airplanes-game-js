@@ -93,3 +93,10 @@ let testLeft = false;
 let newPlayer = false;
 
 let stuffInitialized;
+let endGame = false;
+// animation and design options
+let animationMode = true;
+let animationStatus;
+let gridLinesMode = true;
+let gridLinesStatus;
+let scoreAdded;

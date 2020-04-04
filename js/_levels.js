@@ -162,25 +162,32 @@ function continueFromLast() {
 }
 
 function newGame() {
-    if (lsScoreBoard.length === 0) {
-        playerName = document.getElementById("name").value;
-        localStorageInit();
-    } else
-    if (newPlayer === true) {
-        playerName = document.getElementById("name").value;
-        localStorageInit();
-        newPlayer = false;
+    if (endGame === true) {
+        newPlayer = true;
+        welcomeScreen();
+        endGame = false;
     } else {
-        playerName = lsScoreBoard[0].name;
+        if (lsScoreBoard.length === 0) {
+            playerName = document.getElementById("name").value;
+            localStorageInit();
+        } else
+        if (newPlayer === true) {
+            playerName = document.getElementById("name").value;
+            localStorageInit();
+            newPlayer = false;
+        } else {
+            playerName = lsScoreBoard[0].name;
+        }
+        currentLevel = 1;
+        lvlOnePoints = 0;
+        lvlTwoPoints = 0;
+        lvlThreePoints = 0;
+        lvlFourPoints = 0;
+        currentLevelStatus();
+        updateScoreBoard();
+        closeModal();
     }
-    currentLevel = 1;
-    lvlOnePoints = 0;
-    lvlTwoPoints = 0;
-    lvlThreePoints = 0;
-    lvlFourPoints = 0;
-    currentLevelStatus();
-    updateScoreBoard();
-    closeModal();
+
 }
 
 function changePlayer() {

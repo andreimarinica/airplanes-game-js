@@ -186,7 +186,29 @@ body {
     transform: rotate(360deg);
 
 } */
+/* Added score */
+#floating-score {
+    position: fixed;
+    z-index: 30;
+    top: calc(50vh - 18px);
+    left: calc(50vw - 35px);
+    color: red;
+    animation-name: addedScore;
+    animation-duration: 6s;
+    animation-iteration-count: 1;
+    animation-direction: forwards;
+}
 
+@keyframes addedScore {
+    0% {}
+
+    100% {
+        opacity: 0.4;
+        transform: translateY(-500px) scale(0.7);
+    }
+}
+
+/* Addded score */
 /* Fighter plane moving around the screen */
 .fighter {
     position: fixed;

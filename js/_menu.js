@@ -100,8 +100,7 @@ function exitTrue() {
                 <a href="#" onclick="window.close()" class="play-again exit-yes">YES</a>`;
     modal.style.display = "flex";
 }
-let animationMode = true;
-let animationStatus;
+
 
 function optionsMenu() {
     if (tutorial === true) {
@@ -115,13 +114,19 @@ function optionsMenu() {
     } else {
         animationStatus = `<a href="#" onclick="animationOn(); optionsMenu();" class="menu-option"><i class="fas fa-fighter-jet menu-icon"></i> ANIMATION OFF</a>`;
     }
+
+    if (gridLinesMode === true) {
+        gridLinesStatus = `<a href="#" onclick="gridLinesOff(); optionsMenu();" class="menu-option"><i class="fas fa-fighter-jet menu-icon"></i> GRID LINES ON</a>`;
+    } else {
+        gridLinesStatus = `<a href="#" onclick="gridLinesOn(); optionsMenu();" class="menu-option"><i class="fas fa-fighter-jet menu-icon"></i> GRID LINES OFF</a>`;
+    }
     modalText.innerHTML = `
     <a href="#" class="close-button" onclick="closeModal()"><i class="fas fa-window-close"></i></a>
     <h1>OPTIONS</h1>
     ${checkTutorial}
     ${animationStatus}
     <a href="#" onclick="localStorageReset()" class="menu-option"><i class="fas fa-redo-alt menu-icon"></i> RESET ALL STATS</a>
-    <a href="#" class="menu-option"><i class="fas fa-redo-alt menu-icon"></i> GRID LINES OFF</a>
+    ${gridLinesStatus}
     <a href="#" onclick="gameMenu()" class="menu-option"><i class="fas fa-undo menu-icon"></i> GO BACK</a>`;
     modal.style.display = "flex";
 }
@@ -159,6 +164,16 @@ function updateScoreBoard() {
 }
 
 function modalMessage(title, messageOne, messageTwo) {
+    modalText.innerHTML = `
+                <a href="#" class="close-button" onclick="closeModal()"><i class="fas fa-window-close"></i></a>
+                <h1>${title}</h1>
+                <p>${messageOne}</p>
+                <p>${messageTwo}</p>
+                <a href="#" onclick="closeModal()" class="play-again">OK</a>`;
+    modal.style.display = "flex";
+}
+
+function modalMessageTutorial(title, messageOne, messageTwo) {
     let checkTutorial;
     if (tutorial === true) {
         checkTutorial = `<a href="#" onclick="tutorialOff()" class="play-again">TURN OFF</a>`;

@@ -36,3 +36,41 @@ function animationOff() {
     document.getElementById("clouds-left-2").style.display = "none";
     closeModal();
 }
+
+function gridLinesOn() {
+    gridLinesMode = true;
+    for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 10; j++) {
+            document.getElementById(`${i}${j}`).style.border = "1px solid black";
+            document.getElementById(`${i}-${j}`).style.border = "1px solid black";
+            document.querySelector(".human-grid").style.border = "none";
+            document.querySelector(".computer-grid").style.border = "none";
+        }
+    }
+
+
+}
+
+function gridLinesOff() {
+    gridLinesMode = false;
+    for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 10; j++) {
+            document.getElementById(`${i}${j}`).style.border = "none";
+            document.getElementById(`${i}-${j}`).style.border = "none";
+            document.querySelector(".human-grid").style.border = "1px solid black";
+            document.querySelector(".computer-grid").style.border = "1px solid black";
+        }
+    }
+
+}
+
+function showAddedScore(addedScore) {
+    // floating-score
+    document.getElementById("floating-score-no").innerHTML = `
+            <h1 id="floating-score">+${addedScore}</h1>`;
+}
+
+function hideAddedScore() {
+    // floating-score
+    document.getElementById("floating-score-no").innerHTML = ``;
+}
