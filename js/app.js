@@ -74,36 +74,16 @@ function checkWinner(gridA, gridB) {
                     noOfPoints = lvlFourPoints;
                 }
                 if (currentLevel < 4) {
-                    modalText.innerHTML = `
-                <h1>ENEMY DOWN</h1>
-                <p>${playerName}, you won this battle gaining ${noOfPoints} points in level ${currentLevel}.</p>
-                <p>Please choose your next move.</p>
-                <a href="#" class="play-again" onclick="restartLevel(); closeModal();">RESTART LEVEL</a>
-                <a href="#" class="play-again" onclick="nextLevel(); closeModal();">NEXT LEVEL</a>`;
-                    modal.style.display = "flex";
+                    levelPassed();
                 }
 
                 if (currentLevel === 4) {
-                    // end game message and stats
-                    let totalPoints = lvlOnePoints + lvlTwoPoints + lvlThreePoints + lvlFourPoints;
-                    modalText.innerHTML = `
-                <h1>CONGRATULATIONS!!!</h1>
-                <p>You have managed to beat all the levels of the game.</p>
-                <a href="#" onclick="changePlayer()" class="menu-option"><i class="fas fa-exchange-alt menu-icon"></i> NEW GAME</a>
-                <a href="#" onclick="scoreBoard()" class="menu-option"><i class="far fa-chart-bar menu-icon"></i> SCORE BOARD</a>
-                <a href="#" onclick="exitTrue()" class="menu-option"><i class="fas fa-plane-arrival"></i> EXIT GAME</a>`;
-                    modal.style.display = "flex";
-                    endGame = true;
+                    endGameWinner();
                 }
                 break;
             }
             if (gridB[i][j] === "X" || gridB[i][j] === "O") {
-                modalText.innerHTML = `
-                <p>GAME OVER!!!</p>
-                <p>Computer's missles destroyed all the planes!</p>
-                <p>Computer won.</p>
-                <a href="#" class="play-again" onclick="restartLevel(); closeModal();"><i class="fas fa-plane-departure menu-icon"></i> RESTART LEVEL</a>`;
-                modal.style.display = "flex";
+                playerLost();
                 break;
             }
         }
@@ -295,7 +275,7 @@ function playerHit(coordX, coordY) { // 3 head, 2 hit, 1 miss
     } else {
         missedRand = Math.floor(Math.random() * 3 + 1);
         document.getElementById(`${coordX}${coordY}`).innerHTML = `<img src="../img/missed${missedRand}.png" class="animate" alt="" width="${smokeSize}" height="${smokeSize}">`;
-        // document.getElementById(`${coordX}${coordY}`).style.border = `1px solid orange`;
+        document.getElementById(`${coordX}${coordY}`).style.border = `1px solid steelblue`;
         if (gameOver === false) {
             computerGrid[coordX][coordY] = 1;
             playersTurn = false;
@@ -325,7 +305,7 @@ function computerHit() {
     // optimize random algorithm as if the game progresses too much random will fail
     let x = Math.floor(Math.random() * randomHitArr.length);
     // determine the value of x and find the correct coords in randomhitarr...
-    if (haveHit === true) {
+    if (haveHit === true && currentLevel > 2) {
         // A bit of brain for the computer :: still not properly developed
         let xD = holdHitCoords[0][0];
         let yD = holdHitCoords[0][1];
@@ -466,7 +446,7 @@ function computerHit() {
     } else {
         missedRand = Math.floor(Math.random() * 3 + 1);
         document.getElementById(`${randomHitArr[x][0]}-${randomHitArr[x][1]}`).innerHTML = `<img src="../img/missed${missedRand}.png" alt="" class="animate" width="${smokeSize}" height="${smokeSize}">`;
-        // document.getElementById(`${randomHitArr[x][0]}-${randomHitArr[x][1]}`).style.border = `1px solid orange`;
+        document.getElementById(`${randomHitArr[x][0]}-${randomHitArr[x][1]}`).style.border = `1px solid steelblue`;
         didLastOneHit = false;
         if (gameOver === false) {
             playersTurn = true;

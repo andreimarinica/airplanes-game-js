@@ -209,3 +209,35 @@ function welcomeScreen() {
         modal.style.display = "flex";
     }
 }
+
+function levelPassed() {
+    modalText.innerHTML = `
+                <h1>ENEMY DOWN</h1>
+                <p>${playerName}, you won this battle gaining ${noOfPoints} points in level ${currentLevel}.</p>
+                <p>Please choose your next move.</p>
+                <a href="#" class="play-again" onclick="restartLevel(); closeModal();">RESTART LEVEL</a>
+                <a href="#" class="play-again" onclick="nextLevel(); closeModal();">NEXT LEVEL</a>`;
+    modal.style.display = "flex";
+}
+
+function endGameWinner() {
+    // end game message and stats
+    let totalPoints = lvlOnePoints + lvlTwoPoints + lvlThreePoints + lvlFourPoints;
+    modalText.innerHTML = `
+<h1>CONGRATULATIONS!!!</h1>
+<p>You have managed to beat all the levels of the game and you got ${totalPoints} points in total.</p>
+<a href="#" onclick="newGame()" class="menu-option"><i class="fas fa-exchange-alt menu-icon"></i> NEW GAME</a>
+<a href="#" onclick="scoreBoard()" class="menu-option"><i class="far fa-chart-bar menu-icon"></i> SCORE BOARD</a>
+<a href="#" onclick="exitTrue()" class="menu-option"><i class="fas fa-plane-arrival"></i> EXIT GAME</a>`;
+    modal.style.display = "flex";
+    endGame = true;
+}
+
+function playerLost() {
+    modalText.innerHTML = `
+                <p>GAME OVER!!!</p>
+                <p>The computer managed to destroy both your planes.</p>
+                <p>Please try again.</p>
+                <a href="#" class="play-again" onclick="restartLevel(); closeModal();"><i class="fas fa-plane-departure menu-icon"></i> RESTART LEVEL</a>`;
+    modal.style.display = "flex";
+}
