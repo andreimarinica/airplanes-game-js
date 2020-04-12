@@ -211,6 +211,7 @@ function welcomeScreen() {
 }
 
 function levelPassed() {
+    totalPoints = lvlOnePoints + lvlTwoPoints + lvlThreePoints + lvlFourPoints;
     modalText.innerHTML = `
                 <h1>ENEMY DOWN</h1>
                 <p>${playerName}, you won this battle gaining ${noOfPoints} points in level ${currentLevel}.</p>
@@ -222,7 +223,7 @@ function levelPassed() {
 
 function endGameWinner() {
     // end game message and stats
-    let totalPoints = lvlOnePoints + lvlTwoPoints + lvlThreePoints + lvlFourPoints;
+    totalPoints = lvlOnePoints + lvlTwoPoints + lvlThreePoints + lvlFourPoints;
     modalText.innerHTML = `
 <h1>CONGRATULATIONS!!!</h1>
 <p>You have managed to beat all the levels of the game and you got ${totalPoints} points in total.</p>

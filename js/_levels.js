@@ -52,6 +52,12 @@ function clearLevel() {
     testRight = false;
     testDown = false;
     testLeft = false;
+    if (currentLevel > 1) {
+        totalPoints = lsScoreBoard[0].score;
+    } else {
+        totalPoints = 0;
+    }
+
     // clear the visual design for a fresh game
     clearViews();
 }
@@ -62,11 +68,13 @@ function clearViews() {
             if (playerGrid[i][j] === "") {
                 // If it's empty (and will be) clear the backgrounds (airplanes) and any hit marks
                 document.getElementById(`${i}-${j}`).style.background = "";
+                document.getElementById(`${i}-${j}`).style.border = "";
                 document.getElementById(`${i}-${j}`).innerHTML = "";
             }
             if (computerGrid[i][j] === "") {
                 // If it's empty (and will be) clear the backgrounds (airplanes) and any hit marks
                 document.getElementById(`${i}${j}`).style.background = "";
+                document.getElementById(`${i}${j}`).style.border = "";
                 document.getElementById(`${i}${j}`).innerHTML = "";
             }
         }
@@ -74,6 +82,8 @@ function clearViews() {
     // Clear all the inserted grid cells 
     document.getElementById("playerGrid").innerHTML = "";
     document.getElementById("computerGrid").innerHTML = "";
+    document.getElementById("playerGrid").style.border = "";
+    document.getElementById("computerGrid").style.border = "";
 }
 
 
@@ -126,7 +136,7 @@ function currentLevelStatus() {
         createPlayerBoard();
         createComputerBoard();
         placeTreasure();
-        document.querySelector("body").style.background = `url('../img/bg3.jpg') no-repeat center center/cover`;
+        document.querySelector("body").style.background = `url('../img/bg4.jpg') no-repeat center center/cover`;
         updateScoreBoard();
     }
 }
@@ -137,25 +147,33 @@ function nextLevel() {
     localStorageUpdate();
     currentLevelStatus();
 }
+// lvl 1: 292 p
+// lvl 2: 250 p
 
 function restartLevel() {
     if (currentLevel === 1) {
+        totalPoints -= lvlOnePoints;
         lvlOnePoints = 0;
     } else if (currentLevel === 2) {
+        totalPoints -= lvlTwoPoints;
         lvlTwoPoints = 0;
     } else if (currentLevel === 3) {
+        totalPoints -= lvlThreePoints;
         lvlThreePoints = 0;
     } else if (currentLevel === 4) {
+        totalPoints -= lvlFourPoints;
         lvlFourPoints = 0;
     }
     currentLevelStatus();
     updateScoreBoard();
+    localStorageUpdate();
     closeModal();
 }
 
 function continueFromLast() {
     currentLevel = lsScoreBoard[0].level;
     playerName = lsScoreBoard[0].name;
+    totalPoints = lsScoreBoard[0].score;
     currentLevelStatus();
     updateScoreBoard();
     closeModal();

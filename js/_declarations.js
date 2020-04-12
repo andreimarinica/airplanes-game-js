@@ -53,6 +53,8 @@ let ok = 0;
 let tutorial = true;
 let missedRand = 0;
 // Points System
+let noOfPoints;
+let totalPoints;
 let lvlOnePoints = 0;
 let lvlTwoPoints = 0;
 let lvlThreePoints = 0;
