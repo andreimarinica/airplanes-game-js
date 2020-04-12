@@ -64,6 +64,13 @@ function localStorageUpdate() {
 
 function localStorageReset() {
     lsScoreBoard = [];
+    currentLevel = 1;
+    lvlOnePoints = 0;
+    lvlTwoPoints = 0;
+    lvlThreePoints = 0;
+    lvlFourPoints = 0;
+    totalPoints = 0;
+    noOfPoints = 0;
     localStorage.setItem(LOCAL_STORAGE_SCOREBOARD_KEY, JSON.stringify(lsScoreBoard));
     welcomeScreen();
 }
