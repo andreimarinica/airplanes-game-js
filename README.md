@@ -13,10 +13,10 @@ As you advance through levels (four available) the computer will have more plane
 
 There are some treasures available through the game and these will appear at random locations giving you more points to score.
 
-LVL1 : 2 COMPUTER PLANES : 1 TREASURE
-LVL2 : 3 COMPUTER PLANES : 2 TREASURES
-LVL3 : 4 COMPUTER PLANES : 3 TREASURES
-LVL4 : 5 COMPUTER PLANES : 4 TREASURES
+##### LVL1 : 2 COMPUTER PLANES : 1 TREASURE
+##### LVL2 : 3 COMPUTER PLANES : 2 TREASURES
+##### LVL3 : 4 COMPUTER PLANES : 3 TREASURES
+##### LVL4 : 5 COMPUTER PLANES : 4 TREASURES
 
 ## Play the game below
 
