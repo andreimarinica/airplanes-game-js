@@ -1,3 +1,4 @@
+// place a treasure at a random empty location
 function placeTreasure() {
     let checker = false;
     while (!checker) {
@@ -11,11 +12,6 @@ function placeTreasure() {
     }
 }
 
-
-// if (tutorial === true) {
-//     setTimeout(modalMessage, 100, "DRAW PLANES", "Click or touch an empty area from the first canvas (your canvas). This will be the head of your plane.", "It will show all available directions (green tiles). Continue by clicking in each cell of the chosen plane.");
-// }
-
 // Create an array with all available locations from a grid (10 x 10 = 100 available locations in the beggining)
 function createRandomHitArr() {
     for (let i = 0; i < 10; i++) {
@@ -25,40 +21,49 @@ function createRandomHitArr() {
     }
 }
 
+// check if it's game over after a head hit - player grid
 function checkGameOver(gridT) {
     let counter = 0;
     for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 10; j++) {
+            // check if any head or plane part remaining in player's grid
             if (gridT[i][j] === "X" || gridT[i][j] === "O" || gridT[i][j] === "Y" || gridT[i][j] === "P") {
                 counter++;
             }
         }
     }
+    // if no parts or heads available game over is true
     if (counter === 0) {
         gameOver = true;
+        // check who won
         checkWinner(playerGrid, computerGrid);
     } else {
         gameOver = false;
     }
 }
 
+// check if it's game over after a head hit - computer grid
 function checkGameOverComp(gridT) {
     let counter = 0;
     for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 10; j++) {
+            // check if any head or plane part remaining in computer's grid
             if (gridT[i][j] === "X" || gridT[i][j] === "O") {
                 counter++;
             }
         }
     }
+    // if no parts or heads available game over is true
     if (counter === 0) {
         gameOver = true;
+        // check who won
         checkWinner(playerGrid, computerGrid);
     } else {
         gameOver = false;
     }
 }
 
+// check who won when game over is true
 function checkWinner(gridA, gridB) {
     for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 10; j++) {

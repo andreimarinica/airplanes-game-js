@@ -16,7 +16,7 @@
     margin: auto;
 }
 
-#gameMenu {}
+/* #gameMenu {} */
 
 .gameMenu {
     position: fixed;
@@ -54,7 +54,7 @@
     color: #fff !important;
 }
 
-#form {}
+/* #form {} */
 
 #name {
     border: none;
@@ -160,7 +160,7 @@ body {
 }
 
 /* Score Board */
-#score-board {}
+/* #score-board {} */
 
 .score-board {
     position: fixed;
